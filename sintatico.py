@@ -122,6 +122,8 @@ def p_expression_boolean(p):
                   | FALSE'''
     p[0] = p[1]
 
+# ATIVIDAS QUE FALTAM --> WHILE/FOR/IF
+
 # Define como o programa começa
 def p_start(p):
     """start : expression
