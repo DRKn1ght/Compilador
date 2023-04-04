@@ -2,13 +2,9 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    COMMA
     ELSE
     FOR
     IF
-    LBRACK
-    RBRACK
-    RETURN
     WHILE
 
 Grammar
@@ -21,101 +17,123 @@ Rule 4     term -> term TIMES factor
 Rule 5     term -> term DIVIDE factor
 Rule 6     term -> factor
 Rule 7     factor -> NUM
-Rule 8     factor -> LPAREN expression RPAREN
-Rule 9     expression -> STRING
-Rule 10    expression -> TRUE
-Rule 11    expression -> FALSE
-Rule 12    start -> expression
-Rule 13    start -> declaration
-Rule 14    type_specifier -> INT
-Rule 15    type_specifier -> FLOAT
-Rule 16    type_specifier -> STR
-Rule 17    type_specifier -> BOOL
-Rule 18    declaration -> type_specifier ID expression_opt NEWLINE
-Rule 19    expression_opt -> EQUALS expression
-Rule 20    expression_opt -> empty
-Rule 21    empty -> <empty>
+Rule 8     factor -> ID
+Rule 9     factor -> LPAREN expression RPAREN
+Rule 10    expression -> STRING
+Rule 11    expression -> TRUE
+Rule 12    expression -> FALSE
+Rule 13    start -> expression
+Rule 14    start -> declaration
+Rule 15    start -> function_declaration
+Rule 16    start -> return_statement
+Rule 17    type -> INT
+Rule 18    type -> FLOAT
+Rule 19    type -> STR
+Rule 20    type -> BOOL
+Rule 21    declaration -> type ID expression_opt NEWLINE
+Rule 22    expression_opt -> EQUALS expression
+Rule 23    expression_opt -> empty
+Rule 24    empty -> <empty>
+Rule 25    function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE
+Rule 26    parameter_list -> parameter_list COMMA parameter
+Rule 27    parameter_list -> parameter
+Rule 28    parameter_list -> empty
+Rule 29    parameter -> type ID
+Rule 30    return_statement -> RETURN expression NEWLINE
 
 Terminals, with rules where they appear
 
-BOOL                 : 17
-COMMA                : 
+BOOL                 : 20
+COMMA                : 26
 DIVIDE               : 5
 ELSE                 : 
-EQUALS               : 19
-FALSE                : 11
-FLOAT                : 15
+EQUALS               : 22
+FALSE                : 12
+FLOAT                : 18
 FOR                  : 
-ID                   : 18
+ID                   : 8 21 25 29
 IF                   : 
-INT                  : 14
-LBRACK               : 
-LPAREN               : 8
+INT                  : 17
+LBRACE               : 25
+LPAREN               : 9 25
 MINUS                : 2
-NEWLINE              : 18
+NEWLINE              : 21 30
 NUM                  : 7
 PLUS                 : 1
-RBRACK               : 
-RETURN               : 
-RPAREN               : 8
-STR                  : 16
-STRING               : 9
+RBRACE               : 25
+RETURN               : 30
+RPAREN               : 9 25
+STR                  : 19
+STRING               : 10
 TIMES                : 4
-TRUE                 : 10
+TRUE                 : 11
 WHILE                : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-declaration          : 13
-empty                : 20
-expression           : 1 2 8 12 19
-expression_opt       : 18
+declaration          : 14 25
+empty                : 23 28
+expression           : 1 2 9 13 22 30
+expression_opt       : 21
 factor               : 4 5 6
+function_declaration : 15
+parameter            : 26 27
+parameter_list       : 25 26
+return_statement     : 16 25
 start                : 0
 term                 : 1 2 3 4 5
-type_specifier       : 18
+type                 : 21 25 29
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . start
-    (12) start -> . expression
-    (13) start -> . declaration
+    (13) start -> . expression
+    (14) start -> . declaration
+    (15) start -> . function_declaration
+    (16) start -> . return_statement
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
-    (9) expression -> . STRING
-    (10) expression -> . TRUE
-    (11) expression -> . FALSE
-    (18) declaration -> . type_specifier ID expression_opt NEWLINE
+    (10) expression -> . STRING
+    (11) expression -> . TRUE
+    (12) expression -> . FALSE
+    (21) declaration -> . type ID expression_opt NEWLINE
+    (25) function_declaration -> . type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE
+    (30) return_statement -> . RETURN expression NEWLINE
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
-    (14) type_specifier -> . INT
-    (15) type_specifier -> . FLOAT
-    (16) type_specifier -> . STR
-    (17) type_specifier -> . BOOL
+    (17) type -> . INT
+    (18) type -> . FLOAT
+    (19) type -> . STR
+    (20) type -> . BOOL
     (7) factor -> . NUM
-    (8) factor -> . LPAREN expression RPAREN
+    (8) factor -> . ID
+    (9) factor -> . LPAREN expression RPAREN
 
-    STRING          shift and go to state 5
-    TRUE            shift and go to state 6
-    FALSE           shift and go to state 7
-    INT             shift and go to state 10
-    FLOAT           shift and go to state 11
-    STR             shift and go to state 12
-    BOOL            shift and go to state 13
-    NUM             shift and go to state 14
-    LPAREN          shift and go to state 15
+    STRING          shift and go to state 7
+    TRUE            shift and go to state 8
+    FALSE           shift and go to state 9
+    RETURN          shift and go to state 13
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    STR             shift and go to state 17
+    BOOL            shift and go to state 18
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
     start                          shift and go to state 1
     expression                     shift and go to state 2
     declaration                    shift and go to state 3
-    term                           shift and go to state 4
-    type_specifier                 shift and go to state 8
-    factor                         shift and go to state 9
+    function_declaration           shift and go to state 4
+    return_statement               shift and go to state 5
+    term                           shift and go to state 6
+    type                           shift and go to state 10
+    factor                         shift and go to state 14
 
 state 1
 
@@ -125,23 +143,37 @@ state 1
 
 state 2
 
-    (12) start -> expression .
+    (13) start -> expression .
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
 
-    $end            reduce using rule 12 (start -> expression .)
-    PLUS            shift and go to state 16
-    MINUS           shift and go to state 17
+    $end            reduce using rule 13 (start -> expression .)
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
 
 
 state 3
 
-    (13) start -> declaration .
+    (14) start -> declaration .
 
-    $end            reduce using rule 13 (start -> declaration .)
+    $end            reduce using rule 14 (start -> declaration .)
 
 
 state 4
+
+    (15) start -> function_declaration .
+
+    $end            reduce using rule 15 (start -> function_declaration .)
+
+
+state 5
+
+    (16) start -> return_statement .
+
+    $end            reduce using rule 16 (start -> return_statement .)
+
+
+state 6
 
     (3) expression -> term .
     (4) term -> term . TIMES factor
@@ -152,51 +184,119 @@ state 4
     $end            reduce using rule 3 (expression -> term .)
     RPAREN          reduce using rule 3 (expression -> term .)
     NEWLINE         reduce using rule 3 (expression -> term .)
-    TIMES           shift and go to state 18
-    DIVIDE          shift and go to state 19
-
-
-state 5
-
-    (9) expression -> STRING .
-
-    PLUS            reduce using rule 9 (expression -> STRING .)
-    MINUS           reduce using rule 9 (expression -> STRING .)
-    $end            reduce using rule 9 (expression -> STRING .)
-    RPAREN          reduce using rule 9 (expression -> STRING .)
-    NEWLINE         reduce using rule 9 (expression -> STRING .)
-
-
-state 6
-
-    (10) expression -> TRUE .
-
-    PLUS            reduce using rule 10 (expression -> TRUE .)
-    MINUS           reduce using rule 10 (expression -> TRUE .)
-    $end            reduce using rule 10 (expression -> TRUE .)
-    RPAREN          reduce using rule 10 (expression -> TRUE .)
-    NEWLINE         reduce using rule 10 (expression -> TRUE .)
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
 
 state 7
 
-    (11) expression -> FALSE .
+    (10) expression -> STRING .
 
-    PLUS            reduce using rule 11 (expression -> FALSE .)
-    MINUS           reduce using rule 11 (expression -> FALSE .)
-    $end            reduce using rule 11 (expression -> FALSE .)
-    RPAREN          reduce using rule 11 (expression -> FALSE .)
-    NEWLINE         reduce using rule 11 (expression -> FALSE .)
+    PLUS            reduce using rule 10 (expression -> STRING .)
+    MINUS           reduce using rule 10 (expression -> STRING .)
+    $end            reduce using rule 10 (expression -> STRING .)
+    RPAREN          reduce using rule 10 (expression -> STRING .)
+    NEWLINE         reduce using rule 10 (expression -> STRING .)
 
 
 state 8
 
-    (18) declaration -> type_specifier . ID expression_opt NEWLINE
+    (11) expression -> TRUE .
 
-    ID              shift and go to state 20
+    PLUS            reduce using rule 11 (expression -> TRUE .)
+    MINUS           reduce using rule 11 (expression -> TRUE .)
+    $end            reduce using rule 11 (expression -> TRUE .)
+    RPAREN          reduce using rule 11 (expression -> TRUE .)
+    NEWLINE         reduce using rule 11 (expression -> TRUE .)
 
 
 state 9
+
+    (12) expression -> FALSE .
+
+    PLUS            reduce using rule 12 (expression -> FALSE .)
+    MINUS           reduce using rule 12 (expression -> FALSE .)
+    $end            reduce using rule 12 (expression -> FALSE .)
+    RPAREN          reduce using rule 12 (expression -> FALSE .)
+    NEWLINE         reduce using rule 12 (expression -> FALSE .)
+
+
+state 10
+
+    (21) declaration -> type . ID expression_opt NEWLINE
+    (25) function_declaration -> type . ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE
+
+    ID              shift and go to state 24
+
+
+state 11
+
+    (8) factor -> ID .
+
+    TIMES           reduce using rule 8 (factor -> ID .)
+    DIVIDE          reduce using rule 8 (factor -> ID .)
+    PLUS            reduce using rule 8 (factor -> ID .)
+    MINUS           reduce using rule 8 (factor -> ID .)
+    $end            reduce using rule 8 (factor -> ID .)
+    RPAREN          reduce using rule 8 (factor -> ID .)
+    NEWLINE         reduce using rule 8 (factor -> ID .)
+
+
+state 12
+
+    (9) factor -> LPAREN . expression RPAREN
+    (1) expression -> . expression PLUS term
+    (2) expression -> . expression MINUS term
+    (3) expression -> . term
+    (10) expression -> . STRING
+    (11) expression -> . TRUE
+    (12) expression -> . FALSE
+    (4) term -> . term TIMES factor
+    (5) term -> . term DIVIDE factor
+    (6) term -> . factor
+    (7) factor -> . NUM
+    (8) factor -> . ID
+    (9) factor -> . LPAREN expression RPAREN
+
+    STRING          shift and go to state 7
+    TRUE            shift and go to state 8
+    FALSE           shift and go to state 9
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
+
+    expression                     shift and go to state 25
+    term                           shift and go to state 6
+    factor                         shift and go to state 14
+
+state 13
+
+    (30) return_statement -> RETURN . expression NEWLINE
+    (1) expression -> . expression PLUS term
+    (2) expression -> . expression MINUS term
+    (3) expression -> . term
+    (10) expression -> . STRING
+    (11) expression -> . TRUE
+    (12) expression -> . FALSE
+    (4) term -> . term TIMES factor
+    (5) term -> . term DIVIDE factor
+    (6) term -> . factor
+    (7) factor -> . NUM
+    (8) factor -> . ID
+    (9) factor -> . LPAREN expression RPAREN
+
+    STRING          shift and go to state 7
+    TRUE            shift and go to state 8
+    FALSE           shift and go to state 9
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
+
+    expression                     shift and go to state 26
+    term                           shift and go to state 6
+    factor                         shift and go to state 14
+
+state 14
 
     (6) term -> factor .
 
@@ -209,35 +309,35 @@ state 9
     NEWLINE         reduce using rule 6 (term -> factor .)
 
 
-state 10
+state 15
 
-    (14) type_specifier -> INT .
+    (17) type -> INT .
 
-    ID              reduce using rule 14 (type_specifier -> INT .)
-
-
-state 11
-
-    (15) type_specifier -> FLOAT .
-
-    ID              reduce using rule 15 (type_specifier -> FLOAT .)
+    ID              reduce using rule 17 (type -> INT .)
 
 
-state 12
+state 16
 
-    (16) type_specifier -> STR .
+    (18) type -> FLOAT .
 
-    ID              reduce using rule 16 (type_specifier -> STR .)
-
-
-state 13
-
-    (17) type_specifier -> BOOL .
-
-    ID              reduce using rule 17 (type_specifier -> BOOL .)
+    ID              reduce using rule 18 (type -> FLOAT .)
 
 
-state 14
+state 17
+
+    (19) type -> STR .
+
+    ID              reduce using rule 19 (type -> STR .)
+
+
+state 18
+
+    (20) type -> BOOL .
+
+    ID              reduce using rule 20 (type -> BOOL .)
+
+
+state 19
 
     (7) factor -> NUM .
 
@@ -250,108 +350,104 @@ state 14
     NEWLINE         reduce using rule 7 (factor -> NUM .)
 
 
-state 15
-
-    (8) factor -> LPAREN . expression RPAREN
-    (1) expression -> . expression PLUS term
-    (2) expression -> . expression MINUS term
-    (3) expression -> . term
-    (9) expression -> . STRING
-    (10) expression -> . TRUE
-    (11) expression -> . FALSE
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
-    (6) term -> . factor
-    (7) factor -> . NUM
-    (8) factor -> . LPAREN expression RPAREN
-
-    STRING          shift and go to state 5
-    TRUE            shift and go to state 6
-    FALSE           shift and go to state 7
-    NUM             shift and go to state 14
-    LPAREN          shift and go to state 15
-
-    expression                     shift and go to state 21
-    term                           shift and go to state 4
-    factor                         shift and go to state 9
-
-state 16
+state 20
 
     (1) expression -> expression PLUS . term
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
     (7) factor -> . NUM
-    (8) factor -> . LPAREN expression RPAREN
+    (8) factor -> . ID
+    (9) factor -> . LPAREN expression RPAREN
 
-    NUM             shift and go to state 14
-    LPAREN          shift and go to state 15
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
-    term                           shift and go to state 22
-    factor                         shift and go to state 9
+    term                           shift and go to state 27
+    factor                         shift and go to state 14
 
-state 17
+state 21
 
     (2) expression -> expression MINUS . term
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
     (7) factor -> . NUM
-    (8) factor -> . LPAREN expression RPAREN
+    (8) factor -> . ID
+    (9) factor -> . LPAREN expression RPAREN
 
-    NUM             shift and go to state 14
-    LPAREN          shift and go to state 15
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
-    term                           shift and go to state 23
-    factor                         shift and go to state 9
+    term                           shift and go to state 28
+    factor                         shift and go to state 14
 
-state 18
+state 22
 
     (4) term -> term TIMES . factor
     (7) factor -> . NUM
-    (8) factor -> . LPAREN expression RPAREN
+    (8) factor -> . ID
+    (9) factor -> . LPAREN expression RPAREN
 
-    NUM             shift and go to state 14
-    LPAREN          shift and go to state 15
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
-    factor                         shift and go to state 24
+    factor                         shift and go to state 29
 
-state 19
+state 23
 
     (5) term -> term DIVIDE . factor
     (7) factor -> . NUM
-    (8) factor -> . LPAREN expression RPAREN
+    (8) factor -> . ID
+    (9) factor -> . LPAREN expression RPAREN
 
-    NUM             shift and go to state 14
-    LPAREN          shift and go to state 15
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
-    factor                         shift and go to state 25
+    factor                         shift and go to state 30
 
-state 20
+state 24
 
-    (18) declaration -> type_specifier ID . expression_opt NEWLINE
-    (19) expression_opt -> . EQUALS expression
-    (20) expression_opt -> . empty
-    (21) empty -> .
+    (21) declaration -> type ID . expression_opt NEWLINE
+    (25) function_declaration -> type ID . LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE
+    (22) expression_opt -> . EQUALS expression
+    (23) expression_opt -> . empty
+    (24) empty -> .
 
-    EQUALS          shift and go to state 27
-    NEWLINE         reduce using rule 21 (empty -> .)
+    LPAREN          shift and go to state 32
+    EQUALS          shift and go to state 33
+    NEWLINE         reduce using rule 24 (empty -> .)
 
-    expression_opt                 shift and go to state 26
-    empty                          shift and go to state 28
+    expression_opt                 shift and go to state 31
+    empty                          shift and go to state 34
 
-state 21
+state 25
 
-    (8) factor -> LPAREN expression . RPAREN
+    (9) factor -> LPAREN expression . RPAREN
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
 
-    RPAREN          shift and go to state 29
-    PLUS            shift and go to state 16
-    MINUS           shift and go to state 17
+    RPAREN          shift and go to state 35
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
 
 
-state 22
+state 26
+
+    (30) return_statement -> RETURN expression . NEWLINE
+    (1) expression -> expression . PLUS term
+    (2) expression -> expression . MINUS term
+
+    NEWLINE         shift and go to state 36
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+
+
+state 27
 
     (1) expression -> expression PLUS term .
     (4) term -> term . TIMES factor
@@ -362,11 +458,11 @@ state 22
     $end            reduce using rule 1 (expression -> expression PLUS term .)
     RPAREN          reduce using rule 1 (expression -> expression PLUS term .)
     NEWLINE         reduce using rule 1 (expression -> expression PLUS term .)
-    TIMES           shift and go to state 18
-    DIVIDE          shift and go to state 19
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
 
-state 23
+state 28
 
     (2) expression -> expression MINUS term .
     (4) term -> term . TIMES factor
@@ -377,11 +473,11 @@ state 23
     $end            reduce using rule 2 (expression -> expression MINUS term .)
     RPAREN          reduce using rule 2 (expression -> expression MINUS term .)
     NEWLINE         reduce using rule 2 (expression -> expression MINUS term .)
-    TIMES           shift and go to state 18
-    DIVIDE          shift and go to state 19
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
 
-state 24
+state 29
 
     (4) term -> term TIMES factor .
 
@@ -394,7 +490,7 @@ state 24
     NEWLINE         reduce using rule 4 (term -> term TIMES factor .)
 
 
-state 25
+state 30
 
     (5) term -> term DIVIDE factor .
 
@@ -407,72 +503,240 @@ state 25
     NEWLINE         reduce using rule 5 (term -> term DIVIDE factor .)
 
 
-state 26
+state 31
 
-    (18) declaration -> type_specifier ID expression_opt . NEWLINE
+    (21) declaration -> type ID expression_opt . NEWLINE
 
-    NEWLINE         shift and go to state 30
+    NEWLINE         shift and go to state 37
 
 
-state 27
+state 32
 
-    (19) expression_opt -> EQUALS . expression
+    (25) function_declaration -> type ID LPAREN . parameter_list RPAREN LBRACE declaration return_statement RBRACE
+    (26) parameter_list -> . parameter_list COMMA parameter
+    (27) parameter_list -> . parameter
+    (28) parameter_list -> . empty
+    (29) parameter -> . type ID
+    (24) empty -> .
+    (17) type -> . INT
+    (18) type -> . FLOAT
+    (19) type -> . STR
+    (20) type -> . BOOL
+
+    RPAREN          reduce using rule 24 (empty -> .)
+    COMMA           reduce using rule 24 (empty -> .)
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    STR             shift and go to state 17
+    BOOL            shift and go to state 18
+
+    type                           shift and go to state 38
+    parameter_list                 shift and go to state 39
+    parameter                      shift and go to state 40
+    empty                          shift and go to state 41
+
+state 33
+
+    (22) expression_opt -> EQUALS . expression
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
-    (9) expression -> . STRING
-    (10) expression -> . TRUE
-    (11) expression -> . FALSE
+    (10) expression -> . STRING
+    (11) expression -> . TRUE
+    (12) expression -> . FALSE
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
     (7) factor -> . NUM
-    (8) factor -> . LPAREN expression RPAREN
+    (8) factor -> . ID
+    (9) factor -> . LPAREN expression RPAREN
 
-    STRING          shift and go to state 5
-    TRUE            shift and go to state 6
-    FALSE           shift and go to state 7
-    NUM             shift and go to state 14
-    LPAREN          shift and go to state 15
+    STRING          shift and go to state 7
+    TRUE            shift and go to state 8
+    FALSE           shift and go to state 9
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
-    expression                     shift and go to state 31
-    term                           shift and go to state 4
-    factor                         shift and go to state 9
+    expression                     shift and go to state 42
+    term                           shift and go to state 6
+    factor                         shift and go to state 14
 
-state 28
+state 34
 
-    (20) expression_opt -> empty .
+    (23) expression_opt -> empty .
 
-    NEWLINE         reduce using rule 20 (expression_opt -> empty .)
-
-
-state 29
-
-    (8) factor -> LPAREN expression RPAREN .
-
-    TIMES           reduce using rule 8 (factor -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 8 (factor -> LPAREN expression RPAREN .)
-    PLUS            reduce using rule 8 (factor -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 8 (factor -> LPAREN expression RPAREN .)
-    $end            reduce using rule 8 (factor -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 8 (factor -> LPAREN expression RPAREN .)
-    NEWLINE         reduce using rule 8 (factor -> LPAREN expression RPAREN .)
+    NEWLINE         reduce using rule 23 (expression_opt -> empty .)
 
 
-state 30
+state 35
 
-    (18) declaration -> type_specifier ID expression_opt NEWLINE .
+    (9) factor -> LPAREN expression RPAREN .
 
-    $end            reduce using rule 18 (declaration -> type_specifier ID expression_opt NEWLINE .)
+    TIMES           reduce using rule 9 (factor -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 9 (factor -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 9 (factor -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 9 (factor -> LPAREN expression RPAREN .)
+    $end            reduce using rule 9 (factor -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 9 (factor -> LPAREN expression RPAREN .)
+    NEWLINE         reduce using rule 9 (factor -> LPAREN expression RPAREN .)
 
 
-state 31
+state 36
 
-    (19) expression_opt -> EQUALS expression .
+    (30) return_statement -> RETURN expression NEWLINE .
+
+    $end            reduce using rule 30 (return_statement -> RETURN expression NEWLINE .)
+    RBRACE          reduce using rule 30 (return_statement -> RETURN expression NEWLINE .)
+
+
+state 37
+
+    (21) declaration -> type ID expression_opt NEWLINE .
+
+    $end            reduce using rule 21 (declaration -> type ID expression_opt NEWLINE .)
+    RETURN          reduce using rule 21 (declaration -> type ID expression_opt NEWLINE .)
+
+
+state 38
+
+    (29) parameter -> type . ID
+
+    ID              shift and go to state 43
+
+
+state 39
+
+    (25) function_declaration -> type ID LPAREN parameter_list . RPAREN LBRACE declaration return_statement RBRACE
+    (26) parameter_list -> parameter_list . COMMA parameter
+
+    RPAREN          shift and go to state 44
+    COMMA           shift and go to state 45
+
+
+state 40
+
+    (27) parameter_list -> parameter .
+
+    RPAREN          reduce using rule 27 (parameter_list -> parameter .)
+    COMMA           reduce using rule 27 (parameter_list -> parameter .)
+
+
+state 41
+
+    (28) parameter_list -> empty .
+
+    RPAREN          reduce using rule 28 (parameter_list -> empty .)
+    COMMA           reduce using rule 28 (parameter_list -> empty .)
+
+
+state 42
+
+    (22) expression_opt -> EQUALS expression .
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
 
-    NEWLINE         reduce using rule 19 (expression_opt -> EQUALS expression .)
-    PLUS            shift and go to state 16
-    MINUS           shift and go to state 17
+    NEWLINE         reduce using rule 22 (expression_opt -> EQUALS expression .)
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+
+
+state 43
+
+    (29) parameter -> type ID .
+
+    RPAREN          reduce using rule 29 (parameter -> type ID .)
+    COMMA           reduce using rule 29 (parameter -> type ID .)
+
+
+state 44
+
+    (25) function_declaration -> type ID LPAREN parameter_list RPAREN . LBRACE declaration return_statement RBRACE
+
+    LBRACE          shift and go to state 46
+
+
+state 45
+
+    (26) parameter_list -> parameter_list COMMA . parameter
+    (29) parameter -> . type ID
+    (17) type -> . INT
+    (18) type -> . FLOAT
+    (19) type -> . STR
+    (20) type -> . BOOL
+
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    STR             shift and go to state 17
+    BOOL            shift and go to state 18
+
+    parameter                      shift and go to state 47
+    type                           shift and go to state 38
+
+state 46
+
+    (25) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE . declaration return_statement RBRACE
+    (21) declaration -> . type ID expression_opt NEWLINE
+    (17) type -> . INT
+    (18) type -> . FLOAT
+    (19) type -> . STR
+    (20) type -> . BOOL
+
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    STR             shift and go to state 17
+    BOOL            shift and go to state 18
+
+    type                           shift and go to state 48
+    declaration                    shift and go to state 49
+
+state 47
+
+    (26) parameter_list -> parameter_list COMMA parameter .
+
+    RPAREN          reduce using rule 26 (parameter_list -> parameter_list COMMA parameter .)
+    COMMA           reduce using rule 26 (parameter_list -> parameter_list COMMA parameter .)
+
+
+state 48
+
+    (21) declaration -> type . ID expression_opt NEWLINE
+
+    ID              shift and go to state 50
+
+
+state 49
+
+    (25) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration . return_statement RBRACE
+    (30) return_statement -> . RETURN expression NEWLINE
+
+    RETURN          shift and go to state 13
+
+    return_statement               shift and go to state 51
+
+state 50
+
+    (21) declaration -> type ID . expression_opt NEWLINE
+    (22) expression_opt -> . EQUALS expression
+    (23) expression_opt -> . empty
+    (24) empty -> .
+
+    EQUALS          shift and go to state 33
+    NEWLINE         reduce using rule 24 (empty -> .)
+
+    expression_opt                 shift and go to state 31
+    empty                          shift and go to state 34
+
+state 51
+
+    (25) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement . RBRACE
+
+    RBRACE          shift and go to state 52
+
+
+state 52
+
+    (25) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE .
+
+    $end            reduce using rule 25 (function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE .)
 

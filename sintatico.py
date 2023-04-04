@@ -27,8 +27,8 @@ tokens = [
     'DIVIDE',
     'LPAREN',
     'RPAREN',
-    'LBRACK',
-    'RBRACK',
+    'LBRACE',
+    'RBRACE',
     'COMMA',
     'NEWLINE',
 ]+ list(reserved.values())
@@ -42,9 +42,9 @@ t_MINUS = r'-'
 t_DIVIDE = r'/'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
-t_LBRACK = r'\{'
+t_LBRACE = r'\{'
 t_COMMA = r','
-t_RBRACK = r'\}'
+t_RBRACE = r'\}'
 
 # Define caracteres ignorados
 t_ignore = ' \t'
@@ -103,6 +103,10 @@ def p_factor_num(p):
     'factor : NUM'
     p[0] = p[1]
 
+def p_factor_id(p):
+    'factor : ID'
+    p[0] = p[1]
+
 def p_factor_expr(p):
     'factor : LPAREN expression RPAREN'
     p[0] = p[2]
@@ -112,6 +116,7 @@ def p_expression_string(p):
     '''expression : STRING'''
     p[0] = p[1]
 
+
 def p_expression_boolean(p):
     '''expression : TRUE
                   | FALSE'''
@@ -120,20 +125,22 @@ def p_expression_boolean(p):
 # Define como o programa começa
 def p_start(p):
     """start : expression
-             | declaration"""
+             | declaration
+             | function_declaration
+             | return_statement"""
     p[0] = p[1]
 
 # Define o tipo da variável
 def p_type_specifier(p):
-    '''type_specifier : INT
-                      | FLOAT
-                      | STR
-                      | BOOL'''
+    '''type : INT
+            | FLOAT
+            | STR
+            | BOOL'''
     p[0] = p[1]
 
 # Define a declaração de uma variável
 def p_declaration(p):
-    'declaration : type_specifier ID expression_opt NEWLINE'
+    'declaration : type ID expression_opt NEWLINE'
     if len(p) == 5:
         if p[3] is not None:
             p[0] = (p[1], p[2], p[3])
@@ -154,9 +161,34 @@ def p_empty(p):
     '''empty :'''
     pass
 
+def p_function_declaration(p):
+    '''function_declaration : type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE '''
+    p[0] = ("function", p[1], p[2], p[4], p[6], p[7])
+
+# define the parameter_list rule
+def p_parameter_list(p):
+    '''
+    parameter_list : parameter_list COMMA parameter
+                   | parameter
+                   | empty
+    '''
+    # TA ERRADO TEM Q FAZER PEGAR MAIS DE UM
+    p[0] = p[1]
+
+# define the parameter rule
+def p_parameter(p):
+    '''
+    parameter : type ID
+    '''
+    p[0] = (p[1], p[2])
+
+def p_return_statement(p):
+    '''return_statement : RETURN expression NEWLINE'''
+    p[0] = (p[1], p[2])
+
 parser = yacc.yacc(start='start')
 
 def ast(expression):
     return parser.parse(expression)
 
-print(ast("bool teste = (4 + 3) * 5\n"))
+print(ast("int func1 (int a, int b) {int a = (5 + 3) * 4\n return a\n}"))
