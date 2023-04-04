@@ -13,6 +13,7 @@ reserved = {
     'bool' : 'BOOL',
     'True' : 'TRUE',
     'False' : 'FALSE',
+    'then' : 'THEN'
 }
 
 # Define a lista de Tokens
@@ -31,6 +32,11 @@ tokens = [
     'RBRACE',
     'COMMA',
     'NEWLINE',
+    'NOT_EQUALS',
+    'LESS_THAN',
+    'LESS_THAN_OR_EQUALS',
+    'GREATER_THAN',
+    'GREATER_THAN_OR_EQUALS'
 ]+ list(reserved.values())
 
 # Define o Regex de cada token
@@ -45,6 +51,11 @@ t_RPAREN = r'\)'
 t_LBRACE = r'\{'
 t_COMMA = r','
 t_RBRACE = r'\}'
+t_NOT_EQUALS = r'!='
+t_LESS_THAN = r'<'
+t_LESS_THAN_OR_EQUALS = r'<='
+t_GREATER_THAN = r'>'
+t_GREATER_THAN_OR_EQUALS = r'>='
 
 # Define caracteres ignorados
 t_ignore = ' \t'
@@ -123,6 +134,23 @@ def p_expression_boolean(p):
     p[0] = p[1]
 
 # ATIVIDAS QUE FALTAM --> WHILE/FOR/IF
+def p_comparison(p):
+    '''COMPARISON : EQUALS
+                  | NOT_EQUALS
+                  | LESS_THAN
+                  | LESS_THAN_OR_EQUALS
+                  | GREATER_THAN
+                  | GREATER_THAN_OR_EQUALS'''
+    # Aqui você pode implementar a lógica para processar os diferentes operadores de comparação
+    p[0] = p[1]
+
+def p_condition(p):
+    '''condition : expression COMPARISON expression'''
+    p[0] = {'type': 'condition', 'left_expr': p[1], 'comparison': p[2], 'right_expr': p[3]}
+
+def p_expression_if(p):
+    '''expression : IF condition THEN expression'''
+    p[0] = {'type': 'if', 'condition': p[2], 'expression': p[4]}
 
 # Define como o programa começa
 def p_start(p):
@@ -193,4 +221,5 @@ parser = yacc.yacc(start='start')
 def ast(expression):
     return parser.parse(expression)
 
-print(ast("int func1 (int a, int b) {int a = (5 + 3) * 4\n return a\n}"))
+#print(ast("int func1 (int a, int b) {int a = (5 + 3) * 4\n return a\n"))
+print(ast("if(2 < 3){""}\n"))
