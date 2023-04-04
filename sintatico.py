@@ -11,8 +11,8 @@ reserved = {
     'str' : 'STR',
     'float' : 'FLOAT',
     'bool' : 'BOOL',
-    'true' : 'TRUE',
-    'false' : 'FALSE',
+    'True' : 'TRUE',
+    'False' : 'FALSE',
 }
 
 # Define a lista de Tokens
@@ -74,6 +74,7 @@ def t_error(t):
 
 lexer = lex.lex()
 
+# Regras para pegar as expressões matemáticas
 def p_expression_plus(p):
     'expression : expression PLUS term'
     p[0] = ('+', p[1], p[3])
@@ -105,22 +106,57 @@ def p_factor_num(p):
 def p_factor_expr(p):
     'factor : LPAREN expression RPAREN'
     p[0] = p[2]
-    
 
+
+def p_expression_string(p):
+    '''expression : STRING'''
+    p[0] = p[1]
+
+def p_expression_boolean(p):
+    '''expression : TRUE
+                  | FALSE'''
+    p[0] = p[1]
+
+# Define como o programa começa
 def p_start(p):
     """start : expression
              | declaration"""
     p[0] = p[1]
 
-def p_declaration(p):
-    'declaration : INT ID EQUALS NUM NEWLINE'
-    print(f"Declarou: {p[2]} = {p[4]}")
-    p[0] = p[5]
+# Define o tipo da variável
+def p_type_specifier(p):
+    '''type_specifier : INT
+                      | FLOAT
+                      | STR
+                      | BOOL'''
+    p[0] = p[1]
 
+# Define a declaração de uma variável
+def p_declaration(p):
+    'declaration : type_specifier ID expression_opt NEWLINE'
+    if len(p) == 5:
+        if p[3] is not None:
+            p[0] = (p[1], p[2], p[3])
+        else:
+            p[0] = (p[1], p[2])
+    else:
+        p[0] = (p[1], p[2], p[4])
+
+def p_expression_opt(p):
+    '''expression_opt : EQUALS expression
+                      | empty'''
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = None
+
+def p_empty(p):
+    '''empty :'''
+    pass
 
 parser = yacc.yacc(start='start')
 
 def ast(expression):
     return parser.parse(expression)
 
-print(ast("int a = 5\n 2+3"))
+print(ast("bool teste = (4 + 3) * 5\n"))
