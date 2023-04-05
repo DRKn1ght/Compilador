@@ -21,6 +21,7 @@ tokens = [
     'NUM',
     'STRING',
     'EQUALS',
+    'DOUBLE_EQUALS',
     'TIMES',
     'PLUS',
     'MINUS',
@@ -41,6 +42,7 @@ tokens = [
 # Define o Regex de cada token
 t_NUM = r'\d+(\.\d+)?'
 t_EQUALS = r'='
+t_DOUBLE_EQUALS = r'=='
 t_TIMES = r'\*'
 t_PLUS = r'\+'
 t_MINUS = r'-'
@@ -133,9 +135,9 @@ def p_expression_boolean(p):
     p[0] = p[1]
 
 # ================= ATIVIDAS QUE FALTAM --> WHILE/FOR/IF ======================================
-"""
+
 def p_comparison(p):
-    '''COMPARISON : EQUALS
+    '''comparison : DOUBLE_EQUALS
                   | NOT_EQUALS
                   | LESS_THAN
                   | LESS_THAN_OR_EQUALS
@@ -145,13 +147,20 @@ def p_comparison(p):
     p[0] = p[1]
 
 def p_condition(p):
-    '''condition : expression COMPARISON expression'''
-    p[0] = {'type': 'condition', 'left_expr': p[1], 'comparison': p[2], 'right_expr': p[3]}
+    '''
+        condition : expression comparison expression
+                  | expression
+    '''
+    # p[0] = {'type': 'condition', 'left_expr': p[1], 'comparison': p[2], 'right_expr': p[3]}
+    if (len(p) == 4):
+        p[0] = (p[2], p[1], p[3])
+    else:
+        p[0] = p[1]
 
 def p_expression_if(p):
     '''expression : IF condition THEN expression'''
     p[0] = {'type': 'if', 'condition': p[2], 'expression': p[4]}
-"""
+
 # ==============================================================================================
 
 # Define como o programa começa
@@ -159,7 +168,8 @@ def p_start(p):
     """start : expression
              | declaration
              | function_declaration
-             | return_statement"""
+             | return_statement
+             | condition"""
     p[0] = p[1]
 
 # Define o tipo da variável
@@ -234,10 +244,12 @@ parser = yacc.yacc(start='start')
 def ast(expression):
     return parser.parse(expression)
 
+"""
 print(ast('''int func1 (int a, int b) {
-                int a
+                int a 
                 int b = 34
                 float c = 3.14
                 return a
                 }'''))
-#print(ast("if(2 < 3){""}\n"))
+"""
+print(ast("a == 5 * 3"))
