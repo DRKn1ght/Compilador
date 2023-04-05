@@ -12,7 +12,6 @@ reserved = {
     'bool' : 'BOOL',
     'True' : 'TRUE',
     'False' : 'FALSE',
-    'then' : 'THEN'
 }
 
 # Define a lista de Tokens
@@ -134,7 +133,7 @@ def p_expression_boolean(p):
                   | FALSE'''
     p[0] = p[1]
 
-# ================= ATIVIDAS QUE FALTAM --> WHILE/FOR/IF ======================================
+# ========================================= IF =============================================
 
 def p_comparison(p):
     '''comparison : DOUBLE_EQUALS
@@ -161,7 +160,23 @@ def p_expression_if(p):
     '''expression : IF LPAREN condition RPAREN LBRACE expression RBRACE '''
     p[0] = (p[1], p[3], p[6])
 
-# ==============================================================================================
+# =============================================================================================
+
+# ================= ATIVIDAS QUE FALTAM --> WHILE/FOR ======================================
+'''Iniciar a variável de controle
+ Enquanto (condição) faça
+ Início
+    Instruções;
+    Atualizar a variável de controle;
+ Fim;
+'''
+
+def p_while_statement(p):
+    '''while_statement : WHILE LPAREN condition RPAREN LBRACE expression RBRACE'''
+    p[0] = (p[1], p[3], p[6])
+
+
+# ==========================================================================================
 
 # Define como o programa começa
 def p_start(p):
@@ -169,7 +184,8 @@ def p_start(p):
              | declaration
              | function_declaration
              | return_statement
-             | condition"""
+             | condition
+             | while_statement"""
     p[0] = p[1]
 
 # Define o tipo da variável
@@ -252,4 +268,5 @@ print(ast('''int func1 (int a, int b) {
                 return a
                 }'''))
 """
-print(ast("if(2<=3){\"iuashgdiuasd\"}"))
+#print(ast("if(2<=3){\"iuashgdiuasd\"}"))
+print(ast("while(a){\"fon\"}"))
