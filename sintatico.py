@@ -158,8 +158,8 @@ def p_condition(p):
         p[0] = p[1]
 
 def p_expression_if(p):
-    '''expression : IF condition THEN expression'''
-    p[0] = {'type': 'if', 'condition': p[2], 'expression': p[4]}
+    '''expression : IF LPAREN condition RPAREN LBRACE expression RBRACE '''
+    p[0] = (p[1], p[3], p[6])
 
 # ==============================================================================================
 
@@ -252,4 +252,4 @@ print(ast('''int func1 (int a, int b) {
                 return a
                 }'''))
 """
-print(ast("a == 5 * 3"))
+print(ast("if(2<=3){\"iuashgdiuasd\"}"))
