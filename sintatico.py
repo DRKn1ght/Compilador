@@ -35,7 +35,7 @@ tokens = [
     'LESS_THAN',
     'LESS_THAN_OR_EQUALS',
     'GREATER_THAN',
-    'GREATER_THAN_OR_EQUALS'
+    'GREATER_THAN_OR_EQUALS',
 ]+ list(reserved.values())
 
 # Define o Regex de cada token
@@ -162,7 +162,7 @@ def p_expression_if(p):
 
 # =============================================================================================
 
-# ================= ATIVIDAS QUE FALTAM --> WHILE/FOR ======================================
+# ===================================== WHILE =================================================
 '''Iniciar a variável de controle
  Enquanto (condição) faça
  Início
@@ -175,6 +175,18 @@ def p_while_statement(p):
     '''while_statement : WHILE LPAREN condition RPAREN LBRACE expression RBRACE'''
     p[0] = (p[1], p[3], p[6])
 
+# ==============================================================================================
+
+# ================= ATIVIDAS QUE FALTAM --> FOR ======================================
+# '''for(valor_inicial; condição_final; valor_incremento)
+#  {
+#     instruções;
+#     }
+# '''
+# def p_for_statement(p):
+#     '''for_statement : FOR LPAREN valor_inicial SEMICOLON condição_final SEMICOLON valor_incremento RPAREN statement '''
+#     p[0] = (p[1], p[3], p[5], p[7], p[9])
+
 
 # ==========================================================================================
 
@@ -185,7 +197,8 @@ def p_start(p):
              | function_declaration
              | return_statement
              | condition
-             | while_statement"""
+             | while_statement
+             | for_statement"""
     p[0] = p[1]
 
 # Define o tipo da variável
