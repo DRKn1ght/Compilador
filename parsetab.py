@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'startBOOL COMMA DIVIDE ELSE EQUALS FALSE FLOAT FOR GREATER_THAN GREATER_THAN_OR_EQUALS ID IF INT LBRACE LESS_THAN LESS_THAN_OR_EQUALS LPAREN MINUS NEWLINE NOT_EQUALS NUM PLUS RBRACE RETURN RPAREN STR STRING THEN TIMES TRUE WHILEexpression : expression PLUS termexpression : expression MINUS termexpression : termterm : term TIMES factorterm : term DIVIDE factorterm : factorfactor : NUMfactor : IDfactor : LPAREN expression RPARENexpression : STRINGexpression : TRUE\n                  | FALSECOMPARISON : EQUALS\n                  | NOT_EQUALS\n                  | LESS_THAN\n                  | LESS_THAN_OR_EQUALS\n                  | GREATER_THAN\n                  | GREATER_THAN_OR_EQUALScondition : expression COMPARISON expressionexpression : IF condition THEN expressionstart : expression\n             | declaration\n             | function_declaration\n             | return_statementtype : INT\n            | FLOAT\n            | STR\n            | BOOLdeclaration : type ID expression_opt NEWLINEexpression_opt : EQUALS expression\n                      | emptyempty :function_declaration : type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE \n    parameter_list : parameter_list COMMA parameter\n                   | parameter\n                   | empty\n    \n    parameter : type ID\n    return_statement : RETURN expression NEWLINE'
+_lr_signature = 'startBOOL COMMA DIVIDE ELSE EQUALS FALSE FLOAT GREATER_THAN GREATER_THAN_OR_EQUALS ID IF INT LBRACE LESS_THAN LESS_THAN_OR_EQUALS LPAREN MINUS NEWLINE NOT_EQUALS NUM PLUS RBRACE RETURN RPAREN STR STRING THEN TIMES TRUE WHILEexpression : expression PLUS termexpression : expression MINUS termexpression : termterm : term TIMES factorterm : term DIVIDE factorterm : factorfactor : NUMfactor : IDfactor : LPAREN expression RPARENexpression : STRINGexpression : TRUE\n                  | FALSEstart : expression\n             | declaration\n             | function_declaration\n             | return_statementtype : INT\n            | FLOAT\n            | STR\n            | BOOLdeclaration : type ID expression_optexpression_opt : EQUALS expression\n                      | emptyempty :function_declaration : type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE \n    parameter_list : parameter_list COMMA parameter\n                   | parameter\n                   | empty\n    \n    parameter : type ID\n    return_statement : RETURN expressiondeclaration_list : declaration_list NEWLINE declaration\n                        | declaration\n                        | empty'
     
-_lr_action_items = {'STRING':([0,10,13,14,34,35,36,37,38,39,40,41,44,],[7,7,7,7,7,7,-13,-14,-15,-16,-17,-18,7,]),'TRUE':([0,10,13,14,34,35,36,37,38,39,40,41,44,],[8,8,8,8,8,8,-13,-14,-15,-16,-17,-18,8,]),'FALSE':([0,10,13,14,34,35,36,37,38,39,40,41,44,],[9,9,9,9,9,9,-13,-14,-15,-16,-17,-18,9,]),'IF':([0,10,13,14,34,35,36,37,38,39,40,41,44,],[10,10,10,10,10,10,-13,-14,-15,-16,-17,-18,10,]),'RETURN':([0,50,62,],[14,-29,14,]),'INT':([0,43,58,59,],[16,16,16,16,]),'FLOAT':([0,43,58,59,],[17,17,17,17,]),'STR':([0,43,58,59,],[18,18,18,18,]),'BOOL':([0,43,58,59,],[19,19,19,19,]),'NUM':([0,10,13,14,21,22,23,24,34,35,36,37,38,39,40,41,44,],[20,20,20,20,20,20,20,20,20,20,-13,-14,-15,-16,-17,-18,20,]),'ID':([0,10,11,13,14,16,17,18,19,21,22,23,24,34,35,36,37,38,39,40,41,44,51,61,],[12,12,27,12,12,-25,-26,-27,-28,12,12,12,12,12,12,-13,-14,-15,-16,-17,-18,12,56,63,]),'LPAREN':([0,10,13,14,21,22,23,24,27,34,35,36,37,38,39,40,41,44,],[13,13,13,13,13,13,13,13,43,13,13,-13,-14,-15,-16,-17,-18,13,]),'$end':([1,2,3,4,5,6,7,8,9,12,15,20,30,31,32,33,46,47,48,50,65,],[0,-21,-22,-23,-24,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,-9,-38,-20,-29,-33,]),'PLUS':([2,6,7,8,9,12,15,20,26,28,29,30,31,32,33,46,48,49,55,],[21,-3,-10,-11,-12,-8,-6,-7,21,21,21,-1,-2,-4,-5,-9,21,21,21,]),'MINUS':([2,6,7,8,9,12,15,20,26,28,29,30,31,32,33,46,48,49,55,],[22,-3,-10,-11,-12,-8,-6,-7,22,22,22,-1,-2,-4,-5,-9,22,22,22,]),'EQUALS':([6,7,8,9,12,15,20,26,27,30,31,32,33,46,48,63,],[-3,-10,-11,-12,-8,-6,-7,36,44,-1,-2,-4,-5,-9,-20,44,]),'NOT_EQUALS':([6,7,8,9,12,15,20,26,30,31,32,33,46,48,],[-3,-10,-11,-12,-8,-6,-7,37,-1,-2,-4,-5,-9,-20,]),'LESS_THAN':([6,7,8,9,12,15,20,26,30,31,32,33,46,48,],[-3,-10,-11,-12,-8,-6,-7,38,-1,-2,-4,-5,-9,-20,]),'LESS_THAN_OR_EQUALS':([6,7,8,9,12,15,20,26,30,31,32,33,46,48,],[-3,-10,-11,-12,-8,-6,-7,39,-1,-2,-4,-5,-9,-20,]),'GREATER_THAN':([6,7,8,9,12,15,20,26,30,31,32,33,46,48,],[-3,-10,-11,-12,-8,-6,-7,40,-1,-2,-4,-5,-9,-20,]),'GREATER_THAN_OR_EQUALS':([6,7,8,9,12,15,20,26,30,31,32,33,46,48,],[-3,-10,-11,-12,-8,-6,-7,41,-1,-2,-4,-5,-9,-20,]),'RPAREN':([6,7,8,9,12,15,20,28,30,31,32,33,43,46,48,52,53,54,56,60,],[-3,-10,-11,-12,-8,-6,-7,46,-1,-2,-4,-5,-32,-9,-20,57,-35,-36,-37,-34,]),'NEWLINE':([6,7,8,9,12,15,20,27,29,30,31,32,33,42,45,46,48,55,63,],[-3,-10,-11,-12,-8,-6,-7,-32,47,-1,-2,-4,-5,50,-31,-9,-20,-30,-32,]),'THEN':([6,7,8,9,12,15,20,25,30,31,32,33,46,48,49,],[-3,-10,-11,-12,-8,-6,-7,34,-1,-2,-4,-5,-9,-20,-19,]),'TIMES':([6,12,15,20,30,31,32,33,46,],[23,-8,-6,-7,23,23,-4,-5,-9,]),'DIVIDE':([6,12,15,20,30,31,32,33,46,],[24,-8,-6,-7,24,24,-4,-5,-9,]),'COMMA':([43,52,53,54,56,60,],[-32,58,-35,-36,-37,-34,]),'RBRACE':([47,64,],[-38,65,]),'LBRACE':([57,],[59,]),}
+_lr_action_items = {'STRING':([0,12,13,33,],[7,7,7,7,]),'TRUE':([0,12,13,33,],[8,8,8,8,]),'FALSE':([0,12,13,33,],[9,9,9,9,]),'RETURN':([0,51,],[13,13,]),'INT':([0,32,43,44,51,],[15,15,15,15,15,]),'FLOAT':([0,32,43,44,51,],[16,16,16,16,16,]),'STR':([0,32,43,44,51,],[17,17,17,17,17,]),'BOOL':([0,32,43,44,51,],[18,18,18,18,18,]),'NUM':([0,12,13,20,21,22,23,33,],[19,19,19,19,19,19,19,19,]),'ID':([0,10,12,13,15,16,17,18,20,21,22,23,33,36,46,],[11,24,11,11,-17,-18,-19,-20,11,11,11,11,11,41,50,]),'LPAREN':([0,12,13,20,21,22,23,24,33,],[12,12,12,12,12,12,12,32,12,]),'$end':([1,2,3,4,5,6,7,8,9,11,14,19,24,26,27,28,29,30,31,34,35,40,55,],[0,-13,-14,-15,-16,-3,-10,-11,-12,-8,-6,-7,-24,-30,-1,-2,-4,-5,-21,-23,-9,-22,-25,]),'PLUS':([2,6,7,8,9,11,14,19,25,26,27,28,29,30,35,40,],[20,-3,-10,-11,-12,-8,-6,-7,20,20,-1,-2,-4,-5,-9,20,]),'MINUS':([2,6,7,8,9,11,14,19,25,26,27,28,29,30,35,40,],[21,-3,-10,-11,-12,-8,-6,-7,21,21,-1,-2,-4,-5,-9,21,]),'RPAREN':([6,7,8,9,11,14,19,25,27,28,29,30,32,35,37,38,39,41,45,],[-3,-10,-11,-12,-8,-6,-7,35,-1,-2,-4,-5,-24,-9,42,-27,-28,-29,-26,]),'NEWLINE':([6,7,8,9,11,14,19,26,27,28,29,30,31,34,35,40,44,47,48,49,50,52,53,],[-3,-10,-11,-12,-8,-6,-7,-30,-1,-2,-4,-5,-21,-23,-9,-22,-24,51,-32,-33,-24,54,-31,]),'TIMES':([6,11,14,19,27,28,29,30,35,],[22,-8,-6,-7,22,22,-4,-5,-9,]),'DIVIDE':([6,11,14,19,27,28,29,30,35,],[23,-8,-6,-7,23,23,-4,-5,-9,]),'EQUALS':([24,50,],[33,33,]),'COMMA':([32,37,38,39,41,45,],[-24,43,-27,-28,-29,-26,]),'LBRACE':([42,],[44,]),'RBRACE':([54,],[55,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'start':([0,],[1,]),'expression':([0,10,13,14,34,35,44,],[2,26,28,29,48,49,55,]),'declaration':([0,59,],[3,62,]),'function_declaration':([0,],[4,]),'return_statement':([0,62,],[5,64,]),'term':([0,10,13,14,21,22,34,35,44,],[6,6,6,6,30,31,6,6,6,]),'type':([0,43,58,59,],[11,51,51,61,]),'factor':([0,10,13,14,21,22,23,24,34,35,44,],[15,15,15,15,15,15,32,33,15,15,15,]),'condition':([10,],[25,]),'COMPARISON':([26,],[35,]),'expression_opt':([27,63,],[42,42,]),'empty':([27,43,63,],[45,54,45,]),'parameter_list':([43,],[52,]),'parameter':([43,58,],[53,60,]),}
+_lr_goto_items = {'start':([0,],[1,]),'expression':([0,12,13,33,],[2,25,26,40,]),'declaration':([0,44,51,],[3,48,53,]),'function_declaration':([0,],[4,]),'return_statement':([0,51,],[5,52,]),'term':([0,12,13,20,21,33,],[6,6,6,27,28,6,]),'type':([0,32,43,44,51,],[10,36,36,46,46,]),'factor':([0,12,13,20,21,22,23,33,],[14,14,14,14,14,29,30,14,]),'expression_opt':([24,50,],[31,31,]),'empty':([24,32,44,50,],[34,39,49,34,]),'parameter_list':([32,],[37,]),'parameter':([32,43,],[38,45,]),'declaration_list':([44,],[47,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,42 +27,37 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> start","S'",1,None,None,None),
-  ('expression -> expression PLUS term','expression',3,'p_expression_plus','sintatico.py',90),
-  ('expression -> expression MINUS term','expression',3,'p_expression_minus','sintatico.py',94),
-  ('expression -> term','expression',1,'p_expression_term','sintatico.py',98),
-  ('term -> term TIMES factor','term',3,'p_term_times','sintatico.py',102),
-  ('term -> term DIVIDE factor','term',3,'p_term_div','sintatico.py',106),
-  ('term -> factor','term',1,'p_term_factor','sintatico.py',110),
-  ('factor -> NUM','factor',1,'p_factor_num','sintatico.py',114),
-  ('factor -> ID','factor',1,'p_factor_id','sintatico.py',118),
-  ('factor -> LPAREN expression RPAREN','factor',3,'p_factor_expr','sintatico.py',122),
-  ('expression -> STRING','expression',1,'p_expression_string','sintatico.py',127),
-  ('expression -> TRUE','expression',1,'p_expression_boolean','sintatico.py',132),
-  ('expression -> FALSE','expression',1,'p_expression_boolean','sintatico.py',133),
-  ('COMPARISON -> EQUALS','COMPARISON',1,'p_comparison','sintatico.py',138),
-  ('COMPARISON -> NOT_EQUALS','COMPARISON',1,'p_comparison','sintatico.py',139),
-  ('COMPARISON -> LESS_THAN','COMPARISON',1,'p_comparison','sintatico.py',140),
-  ('COMPARISON -> LESS_THAN_OR_EQUALS','COMPARISON',1,'p_comparison','sintatico.py',141),
-  ('COMPARISON -> GREATER_THAN','COMPARISON',1,'p_comparison','sintatico.py',142),
-  ('COMPARISON -> GREATER_THAN_OR_EQUALS','COMPARISON',1,'p_comparison','sintatico.py',143),
-  ('condition -> expression COMPARISON expression','condition',3,'p_condition','sintatico.py',148),
-  ('expression -> IF condition THEN expression','expression',4,'p_expression_if','sintatico.py',152),
-  ('start -> expression','start',1,'p_start','sintatico.py',157),
-  ('start -> declaration','start',1,'p_start','sintatico.py',158),
-  ('start -> function_declaration','start',1,'p_start','sintatico.py',159),
-  ('start -> return_statement','start',1,'p_start','sintatico.py',160),
-  ('type -> INT','type',1,'p_type_specifier','sintatico.py',165),
-  ('type -> FLOAT','type',1,'p_type_specifier','sintatico.py',166),
-  ('type -> STR','type',1,'p_type_specifier','sintatico.py',167),
-  ('type -> BOOL','type',1,'p_type_specifier','sintatico.py',168),
-  ('declaration -> type ID expression_opt NEWLINE','declaration',4,'p_declaration','sintatico.py',173),
-  ('expression_opt -> EQUALS expression','expression_opt',2,'p_expression_opt','sintatico.py',183),
-  ('expression_opt -> empty','expression_opt',1,'p_expression_opt','sintatico.py',184),
-  ('empty -> <empty>','empty',0,'p_empty','sintatico.py',191),
-  ('function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE','function_declaration',9,'p_function_declaration','sintatico.py',195),
-  ('parameter_list -> parameter_list COMMA parameter','parameter_list',3,'p_parameter_list','sintatico.py',201),
-  ('parameter_list -> parameter','parameter_list',1,'p_parameter_list','sintatico.py',202),
-  ('parameter_list -> empty','parameter_list',1,'p_parameter_list','sintatico.py',203),
-  ('parameter -> type ID','parameter',2,'p_parameter','sintatico.py',211),
-  ('return_statement -> RETURN expression NEWLINE','return_statement',3,'p_return_statement','sintatico.py',216),
+  ('expression -> expression PLUS term','expression',3,'p_expression_plus','sintatico.py',89),
+  ('expression -> expression MINUS term','expression',3,'p_expression_minus','sintatico.py',93),
+  ('expression -> term','expression',1,'p_expression_term','sintatico.py',97),
+  ('term -> term TIMES factor','term',3,'p_term_times','sintatico.py',101),
+  ('term -> term DIVIDE factor','term',3,'p_term_div','sintatico.py',105),
+  ('term -> factor','term',1,'p_term_factor','sintatico.py',109),
+  ('factor -> NUM','factor',1,'p_factor_num','sintatico.py',113),
+  ('factor -> ID','factor',1,'p_factor_id','sintatico.py',117),
+  ('factor -> LPAREN expression RPAREN','factor',3,'p_factor_expr','sintatico.py',121),
+  ('expression -> STRING','expression',1,'p_expression_string','sintatico.py',126),
+  ('expression -> TRUE','expression',1,'p_expression_boolean','sintatico.py',131),
+  ('expression -> FALSE','expression',1,'p_expression_boolean','sintatico.py',132),
+  ('start -> expression','start',1,'p_start','sintatico.py',159),
+  ('start -> declaration','start',1,'p_start','sintatico.py',160),
+  ('start -> function_declaration','start',1,'p_start','sintatico.py',161),
+  ('start -> return_statement','start',1,'p_start','sintatico.py',162),
+  ('type -> INT','type',1,'p_type_specifier','sintatico.py',167),
+  ('type -> FLOAT','type',1,'p_type_specifier','sintatico.py',168),
+  ('type -> STR','type',1,'p_type_specifier','sintatico.py',169),
+  ('type -> BOOL','type',1,'p_type_specifier','sintatico.py',170),
+  ('declaration -> type ID expression_opt','declaration',3,'p_declaration','sintatico.py',175),
+  ('expression_opt -> EQUALS expression','expression_opt',2,'p_expression_opt','sintatico.py',185),
+  ('expression_opt -> empty','expression_opt',1,'p_expression_opt','sintatico.py',186),
+  ('empty -> <empty>','empty',0,'p_empty','sintatico.py',193),
+  ('function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE','function_declaration',11,'p_function_declaration','sintatico.py',197),
+  ('parameter_list -> parameter_list COMMA parameter','parameter_list',3,'p_parameter_list','sintatico.py',203),
+  ('parameter_list -> parameter','parameter_list',1,'p_parameter_list','sintatico.py',204),
+  ('parameter_list -> empty','parameter_list',1,'p_parameter_list','sintatico.py',205),
+  ('parameter -> type ID','parameter',2,'p_parameter','sintatico.py',215),
+  ('return_statement -> RETURN expression','return_statement',2,'p_return_statement','sintatico.py',220),
+  ('declaration_list -> declaration_list NEWLINE declaration','declaration_list',3,'p_declaration_list','sintatico.py',224),
+  ('declaration_list -> declaration','declaration_list',1,'p_declaration_list','sintatico.py',225),
+  ('declaration_list -> empty','declaration_list',1,'p_declaration_list','sintatico.py',226),
 ]

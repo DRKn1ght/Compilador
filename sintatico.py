@@ -5,7 +5,6 @@ reserved = {
     'if': 'IF',
     'else': 'ELSE',
     'while': 'WHILE',
-    'for': 'FOR',
     'return': 'RETURN',
     'int': 'INT',
     'str' : 'STR',
@@ -134,6 +133,7 @@ def p_expression_boolean(p):
     p[0] = p[1]
 
 # ================= ATIVIDAS QUE FALTAM --> WHILE/FOR/IF ======================================
+"""
 def p_comparison(p):
     '''COMPARISON : EQUALS
                   | NOT_EQUALS
@@ -151,7 +151,7 @@ def p_condition(p):
 def p_expression_if(p):
     '''expression : IF condition THEN expression'''
     p[0] = {'type': 'if', 'condition': p[2], 'expression': p[4]}
-
+"""
 # ==============================================================================================
 
 # Define como o programa começa
@@ -172,14 +172,14 @@ def p_type_specifier(p):
 
 # Define a declaração de uma variável
 def p_declaration(p):
-    'declaration : type ID expression_opt NEWLINE'
-    if len(p) == 5:
+    'declaration : type ID expression_opt'
+    if len(p) == 4:
         if p[3] is not None:
             p[0] = (p[1], p[2], p[3])
         else:
             p[0] = (p[1], p[2])
     else:
-        p[0] = (p[1], p[2], p[4])
+        p[0] = (p[1], p[2], p[3])
 
 def p_expression_opt(p):
     '''expression_opt : EQUALS expression
@@ -194,8 +194,8 @@ def p_empty(p):
     pass
 
 def p_function_declaration(p):
-    '''function_declaration : type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE '''
-    p[0] = ("function", p[1], p[2], p[4], p[6], p[7])
+    '''function_declaration : type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE '''
+    p[0] = ("function", p[1], p[2], p[4], p[7], p[9])
 
 # define the parameter_list rule
 def p_parameter_list(p):
@@ -204,8 +204,10 @@ def p_parameter_list(p):
                    | parameter
                    | empty
     '''
-    # TA ERRADO TEM Q FAZER PEGAR MAIS DE UM
-    p[0] = p[1]
+    if (len(p) == 4):
+        p[0] = p[1] + [p[3]]
+    else:
+        p[0] = [p[1]]
 
 # define the parameter rule
 def p_parameter(p):
@@ -215,13 +217,27 @@ def p_parameter(p):
     p[0] = (p[1], p[2])
 
 def p_return_statement(p):
-    '''return_statement : RETURN expression NEWLINE'''
+    '''return_statement : RETURN expression'''
     p[0] = (p[1], p[2])
+
+def p_declaration_list(p):
+    '''declaration_list : declaration_list NEWLINE declaration
+                        | declaration
+                        | empty'''
+    if (len(p) == 4):
+        p[0] = p[1] + [p[3]]
+    else:
+        p[0] = [p[1]]
 
 parser = yacc.yacc(start='start')
 
 def ast(expression):
     return parser.parse(expression)
 
-#print(ast("int func1 (int a, int b) {int a = (5 + 3) * 4\n return a\n"))
-print(ast("if(2 < 3){""}\n"))
+print(ast('''int func1 (int a, int b) {
+                int a
+                int b = 34
+                float c = 3.14
+                return a
+                }'''))
+#print(ast("if(2 < 3){""}\n"))

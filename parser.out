@@ -3,7 +3,13 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Unused terminals:
 
     ELSE
-    FOR
+    GREATER_THAN
+    GREATER_THAN_OR_EQUALS
+    IF
+    LESS_THAN
+    LESS_THAN_OR_EQUALS
+    NOT_EQUALS
+    THEN
     WHILE
 
 Grammar
@@ -21,63 +27,57 @@ Rule 9     factor -> LPAREN expression RPAREN
 Rule 10    expression -> STRING
 Rule 11    expression -> TRUE
 Rule 12    expression -> FALSE
-Rule 13    COMPARISON -> EQUALS
-Rule 14    COMPARISON -> NOT_EQUALS
-Rule 15    COMPARISON -> LESS_THAN
-Rule 16    COMPARISON -> LESS_THAN_OR_EQUALS
-Rule 17    COMPARISON -> GREATER_THAN
-Rule 18    COMPARISON -> GREATER_THAN_OR_EQUALS
-Rule 19    condition -> expression COMPARISON expression
-Rule 20    expression -> IF condition THEN expression
-Rule 21    start -> expression
-Rule 22    start -> declaration
-Rule 23    start -> function_declaration
-Rule 24    start -> return_statement
-Rule 25    type -> INT
-Rule 26    type -> FLOAT
-Rule 27    type -> STR
-Rule 28    type -> BOOL
-Rule 29    declaration -> type ID expression_opt NEWLINE
-Rule 30    expression_opt -> EQUALS expression
-Rule 31    expression_opt -> empty
-Rule 32    empty -> <empty>
-Rule 33    function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE
-Rule 34    parameter_list -> parameter_list COMMA parameter
-Rule 35    parameter_list -> parameter
-Rule 36    parameter_list -> empty
-Rule 37    parameter -> type ID
-Rule 38    return_statement -> RETURN expression NEWLINE
+Rule 13    start -> expression
+Rule 14    start -> declaration
+Rule 15    start -> function_declaration
+Rule 16    start -> return_statement
+Rule 17    type -> INT
+Rule 18    type -> FLOAT
+Rule 19    type -> STR
+Rule 20    type -> BOOL
+Rule 21    declaration -> type ID expression_opt
+Rule 22    expression_opt -> EQUALS expression
+Rule 23    expression_opt -> empty
+Rule 24    empty -> <empty>
+Rule 25    function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE
+Rule 26    parameter_list -> parameter_list COMMA parameter
+Rule 27    parameter_list -> parameter
+Rule 28    parameter_list -> empty
+Rule 29    parameter -> type ID
+Rule 30    return_statement -> RETURN expression
+Rule 31    declaration_list -> declaration_list NEWLINE declaration
+Rule 32    declaration_list -> declaration
+Rule 33    declaration_list -> empty
 
 Terminals, with rules where they appear
 
-BOOL                 : 28
-COMMA                : 34
+BOOL                 : 20
+COMMA                : 26
 DIVIDE               : 5
 ELSE                 : 
-EQUALS               : 13 30
+EQUALS               : 22
 FALSE                : 12
-FLOAT                : 26
-FOR                  : 
-GREATER_THAN         : 17
-GREATER_THAN_OR_EQUALS : 18
-ID                   : 8 29 33 37
-IF                   : 20
-INT                  : 25
-LBRACE               : 33
-LESS_THAN            : 15
-LESS_THAN_OR_EQUALS  : 16
-LPAREN               : 9 33
+FLOAT                : 18
+GREATER_THAN         : 
+GREATER_THAN_OR_EQUALS : 
+ID                   : 8 21 25 29
+IF                   : 
+INT                  : 17
+LBRACE               : 25
+LESS_THAN            : 
+LESS_THAN_OR_EQUALS  : 
+LPAREN               : 9 25
 MINUS                : 2
-NEWLINE              : 29 38
-NOT_EQUALS           : 14
+NEWLINE              : 25 25 31
+NOT_EQUALS           : 
 NUM                  : 7
 PLUS                 : 1
-RBRACE               : 33
-RETURN               : 38
-RPAREN               : 9 33
-STR                  : 27
+RBRACE               : 25
+RETURN               : 30
+RPAREN               : 9 25
+STR                  : 19
 STRING               : 10
-THEN                 : 20
+THEN                 : 
 TIMES                : 4
 TRUE                 : 11
 WHILE                : 
@@ -85,47 +85,45 @@ error                :
 
 Nonterminals, with rules where they appear
 
-COMPARISON           : 19
-condition            : 20
-declaration          : 22 33
-empty                : 31 36
-expression           : 1 2 9 19 19 20 21 30 38
-expression_opt       : 29
+declaration          : 14 31 32
+declaration_list     : 25 31
+empty                : 23 28 33
+expression           : 1 2 9 13 22 30
+expression_opt       : 21
 factor               : 4 5 6
-function_declaration : 23
-parameter            : 34 35
-parameter_list       : 33 34
-return_statement     : 24 33
+function_declaration : 15
+parameter            : 26 27
+parameter_list       : 25 26
+return_statement     : 16 25
 start                : 0
 term                 : 1 2 3 4 5
-type                 : 29 33 37
+type                 : 21 25 29
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . start
-    (21) start -> . expression
-    (22) start -> . declaration
-    (23) start -> . function_declaration
-    (24) start -> . return_statement
+    (13) start -> . expression
+    (14) start -> . declaration
+    (15) start -> . function_declaration
+    (16) start -> . return_statement
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
     (10) expression -> . STRING
     (11) expression -> . TRUE
     (12) expression -> . FALSE
-    (20) expression -> . IF condition THEN expression
-    (29) declaration -> . type ID expression_opt NEWLINE
-    (33) function_declaration -> . type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE
-    (38) return_statement -> . RETURN expression NEWLINE
+    (21) declaration -> . type ID expression_opt
+    (25) function_declaration -> . type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE
+    (30) return_statement -> . RETURN expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
-    (25) type -> . INT
-    (26) type -> . FLOAT
-    (27) type -> . STR
-    (28) type -> . BOOL
+    (17) type -> . INT
+    (18) type -> . FLOAT
+    (19) type -> . STR
+    (20) type -> . BOOL
     (7) factor -> . NUM
     (8) factor -> . ID
     (9) factor -> . LPAREN expression RPAREN
@@ -133,15 +131,14 @@ state 0
     STRING          shift and go to state 7
     TRUE            shift and go to state 8
     FALSE           shift and go to state 9
-    IF              shift and go to state 10
-    RETURN          shift and go to state 14
-    INT             shift and go to state 16
-    FLOAT           shift and go to state 17
-    STR             shift and go to state 18
-    BOOL            shift and go to state 19
-    NUM             shift and go to state 20
-    ID              shift and go to state 12
-    LPAREN          shift and go to state 13
+    RETURN          shift and go to state 13
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    STR             shift and go to state 17
+    BOOL            shift and go to state 18
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
     start                          shift and go to state 1
     expression                     shift and go to state 2
@@ -149,8 +146,8 @@ state 0
     function_declaration           shift and go to state 4
     return_statement               shift and go to state 5
     term                           shift and go to state 6
-    type                           shift and go to state 11
-    factor                         shift and go to state 15
+    type                           shift and go to state 10
+    factor                         shift and go to state 14
 
 state 1
 
@@ -160,34 +157,34 @@ state 1
 
 state 2
 
-    (21) start -> expression .
+    (13) start -> expression .
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
 
-    $end            reduce using rule 21 (start -> expression .)
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    $end            reduce using rule 13 (start -> expression .)
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
 
 
 state 3
 
-    (22) start -> declaration .
+    (14) start -> declaration .
 
-    $end            reduce using rule 22 (start -> declaration .)
+    $end            reduce using rule 14 (start -> declaration .)
 
 
 state 4
 
-    (23) start -> function_declaration .
+    (15) start -> function_declaration .
 
-    $end            reduce using rule 23 (start -> function_declaration .)
+    $end            reduce using rule 15 (start -> function_declaration .)
 
 
 state 5
 
-    (24) start -> return_statement .
+    (16) start -> return_statement .
 
-    $end            reduce using rule 24 (start -> return_statement .)
+    $end            reduce using rule 16 (start -> return_statement .)
 
 
 state 6
@@ -199,17 +196,10 @@ state 6
     PLUS            reduce using rule 3 (expression -> term .)
     MINUS           reduce using rule 3 (expression -> term .)
     $end            reduce using rule 3 (expression -> term .)
-    EQUALS          reduce using rule 3 (expression -> term .)
-    NOT_EQUALS      reduce using rule 3 (expression -> term .)
-    LESS_THAN       reduce using rule 3 (expression -> term .)
-    LESS_THAN_OR_EQUALS reduce using rule 3 (expression -> term .)
-    GREATER_THAN    reduce using rule 3 (expression -> term .)
-    GREATER_THAN_OR_EQUALS reduce using rule 3 (expression -> term .)
     RPAREN          reduce using rule 3 (expression -> term .)
     NEWLINE         reduce using rule 3 (expression -> term .)
-    THEN            reduce using rule 3 (expression -> term .)
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 24
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
 
 state 7
@@ -219,15 +209,8 @@ state 7
     PLUS            reduce using rule 10 (expression -> STRING .)
     MINUS           reduce using rule 10 (expression -> STRING .)
     $end            reduce using rule 10 (expression -> STRING .)
-    EQUALS          reduce using rule 10 (expression -> STRING .)
-    NOT_EQUALS      reduce using rule 10 (expression -> STRING .)
-    LESS_THAN       reduce using rule 10 (expression -> STRING .)
-    LESS_THAN_OR_EQUALS reduce using rule 10 (expression -> STRING .)
-    GREATER_THAN    reduce using rule 10 (expression -> STRING .)
-    GREATER_THAN_OR_EQUALS reduce using rule 10 (expression -> STRING .)
     RPAREN          reduce using rule 10 (expression -> STRING .)
     NEWLINE         reduce using rule 10 (expression -> STRING .)
-    THEN            reduce using rule 10 (expression -> STRING .)
 
 
 state 8
@@ -237,15 +220,8 @@ state 8
     PLUS            reduce using rule 11 (expression -> TRUE .)
     MINUS           reduce using rule 11 (expression -> TRUE .)
     $end            reduce using rule 11 (expression -> TRUE .)
-    EQUALS          reduce using rule 11 (expression -> TRUE .)
-    NOT_EQUALS      reduce using rule 11 (expression -> TRUE .)
-    LESS_THAN       reduce using rule 11 (expression -> TRUE .)
-    LESS_THAN_OR_EQUALS reduce using rule 11 (expression -> TRUE .)
-    GREATER_THAN    reduce using rule 11 (expression -> TRUE .)
-    GREATER_THAN_OR_EQUALS reduce using rule 11 (expression -> TRUE .)
     RPAREN          reduce using rule 11 (expression -> TRUE .)
     NEWLINE         reduce using rule 11 (expression -> TRUE .)
-    THEN            reduce using rule 11 (expression -> TRUE .)
 
 
 state 9
@@ -255,57 +231,19 @@ state 9
     PLUS            reduce using rule 12 (expression -> FALSE .)
     MINUS           reduce using rule 12 (expression -> FALSE .)
     $end            reduce using rule 12 (expression -> FALSE .)
-    EQUALS          reduce using rule 12 (expression -> FALSE .)
-    NOT_EQUALS      reduce using rule 12 (expression -> FALSE .)
-    LESS_THAN       reduce using rule 12 (expression -> FALSE .)
-    LESS_THAN_OR_EQUALS reduce using rule 12 (expression -> FALSE .)
-    GREATER_THAN    reduce using rule 12 (expression -> FALSE .)
-    GREATER_THAN_OR_EQUALS reduce using rule 12 (expression -> FALSE .)
     RPAREN          reduce using rule 12 (expression -> FALSE .)
     NEWLINE         reduce using rule 12 (expression -> FALSE .)
-    THEN            reduce using rule 12 (expression -> FALSE .)
 
 
 state 10
 
-    (20) expression -> IF . condition THEN expression
-    (19) condition -> . expression COMPARISON expression
-    (1) expression -> . expression PLUS term
-    (2) expression -> . expression MINUS term
-    (3) expression -> . term
-    (10) expression -> . STRING
-    (11) expression -> . TRUE
-    (12) expression -> . FALSE
-    (20) expression -> . IF condition THEN expression
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
-    (6) term -> . factor
-    (7) factor -> . NUM
-    (8) factor -> . ID
-    (9) factor -> . LPAREN expression RPAREN
+    (21) declaration -> type . ID expression_opt
+    (25) function_declaration -> type . ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE
 
-    STRING          shift and go to state 7
-    TRUE            shift and go to state 8
-    FALSE           shift and go to state 9
-    IF              shift and go to state 10
-    NUM             shift and go to state 20
-    ID              shift and go to state 12
-    LPAREN          shift and go to state 13
+    ID              shift and go to state 24
 
-    condition                      shift and go to state 25
-    expression                     shift and go to state 26
-    term                           shift and go to state 6
-    factor                         shift and go to state 15
 
 state 11
-
-    (29) declaration -> type . ID expression_opt NEWLINE
-    (33) function_declaration -> type . ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE
-
-    ID              shift and go to state 27
-
-
-state 12
 
     (8) factor -> ID .
 
@@ -314,18 +252,11 @@ state 12
     PLUS            reduce using rule 8 (factor -> ID .)
     MINUS           reduce using rule 8 (factor -> ID .)
     $end            reduce using rule 8 (factor -> ID .)
-    EQUALS          reduce using rule 8 (factor -> ID .)
-    NOT_EQUALS      reduce using rule 8 (factor -> ID .)
-    LESS_THAN       reduce using rule 8 (factor -> ID .)
-    LESS_THAN_OR_EQUALS reduce using rule 8 (factor -> ID .)
-    GREATER_THAN    reduce using rule 8 (factor -> ID .)
-    GREATER_THAN_OR_EQUALS reduce using rule 8 (factor -> ID .)
     RPAREN          reduce using rule 8 (factor -> ID .)
     NEWLINE         reduce using rule 8 (factor -> ID .)
-    THEN            reduce using rule 8 (factor -> ID .)
 
 
-state 13
+state 12
 
     (9) factor -> LPAREN . expression RPAREN
     (1) expression -> . expression PLUS term
@@ -334,7 +265,6 @@ state 13
     (10) expression -> . STRING
     (11) expression -> . TRUE
     (12) expression -> . FALSE
-    (20) expression -> . IF condition THEN expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -345,25 +275,23 @@ state 13
     STRING          shift and go to state 7
     TRUE            shift and go to state 8
     FALSE           shift and go to state 9
-    IF              shift and go to state 10
-    NUM             shift and go to state 20
-    ID              shift and go to state 12
-    LPAREN          shift and go to state 13
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
-    expression                     shift and go to state 28
+    expression                     shift and go to state 25
     term                           shift and go to state 6
-    factor                         shift and go to state 15
+    factor                         shift and go to state 14
 
-state 14
+state 13
 
-    (38) return_statement -> RETURN . expression NEWLINE
+    (30) return_statement -> RETURN . expression
     (1) expression -> . expression PLUS term
     (2) expression -> . expression MINUS term
     (3) expression -> . term
     (10) expression -> . STRING
     (11) expression -> . TRUE
     (12) expression -> . FALSE
-    (20) expression -> . IF condition THEN expression
     (4) term -> . term TIMES factor
     (5) term -> . term DIVIDE factor
     (6) term -> . factor
@@ -374,16 +302,15 @@ state 14
     STRING          shift and go to state 7
     TRUE            shift and go to state 8
     FALSE           shift and go to state 9
-    IF              shift and go to state 10
-    NUM             shift and go to state 20
-    ID              shift and go to state 12
-    LPAREN          shift and go to state 13
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
-    expression                     shift and go to state 29
+    expression                     shift and go to state 26
     term                           shift and go to state 6
-    factor                         shift and go to state 15
+    factor                         shift and go to state 14
 
-state 15
+state 14
 
     (6) term -> factor .
 
@@ -392,46 +319,39 @@ state 15
     PLUS            reduce using rule 6 (term -> factor .)
     MINUS           reduce using rule 6 (term -> factor .)
     $end            reduce using rule 6 (term -> factor .)
-    EQUALS          reduce using rule 6 (term -> factor .)
-    NOT_EQUALS      reduce using rule 6 (term -> factor .)
-    LESS_THAN       reduce using rule 6 (term -> factor .)
-    LESS_THAN_OR_EQUALS reduce using rule 6 (term -> factor .)
-    GREATER_THAN    reduce using rule 6 (term -> factor .)
-    GREATER_THAN_OR_EQUALS reduce using rule 6 (term -> factor .)
     RPAREN          reduce using rule 6 (term -> factor .)
     NEWLINE         reduce using rule 6 (term -> factor .)
-    THEN            reduce using rule 6 (term -> factor .)
+
+
+state 15
+
+    (17) type -> INT .
+
+    ID              reduce using rule 17 (type -> INT .)
 
 
 state 16
 
-    (25) type -> INT .
+    (18) type -> FLOAT .
 
-    ID              reduce using rule 25 (type -> INT .)
+    ID              reduce using rule 18 (type -> FLOAT .)
 
 
 state 17
 
-    (26) type -> FLOAT .
+    (19) type -> STR .
 
-    ID              reduce using rule 26 (type -> FLOAT .)
+    ID              reduce using rule 19 (type -> STR .)
 
 
 state 18
 
-    (27) type -> STR .
+    (20) type -> BOOL .
 
-    ID              reduce using rule 27 (type -> STR .)
+    ID              reduce using rule 20 (type -> BOOL .)
 
 
 state 19
-
-    (28) type -> BOOL .
-
-    ID              reduce using rule 28 (type -> BOOL .)
-
-
-state 20
 
     (7) factor -> NUM .
 
@@ -440,18 +360,11 @@ state 20
     PLUS            reduce using rule 7 (factor -> NUM .)
     MINUS           reduce using rule 7 (factor -> NUM .)
     $end            reduce using rule 7 (factor -> NUM .)
-    EQUALS          reduce using rule 7 (factor -> NUM .)
-    NOT_EQUALS      reduce using rule 7 (factor -> NUM .)
-    LESS_THAN       reduce using rule 7 (factor -> NUM .)
-    LESS_THAN_OR_EQUALS reduce using rule 7 (factor -> NUM .)
-    GREATER_THAN    reduce using rule 7 (factor -> NUM .)
-    GREATER_THAN_OR_EQUALS reduce using rule 7 (factor -> NUM .)
     RPAREN          reduce using rule 7 (factor -> NUM .)
     NEWLINE         reduce using rule 7 (factor -> NUM .)
-    THEN            reduce using rule 7 (factor -> NUM .)
 
 
-state 21
+state 20
 
     (1) expression -> expression PLUS . term
     (4) term -> . term TIMES factor
@@ -461,14 +374,14 @@ state 21
     (8) factor -> . ID
     (9) factor -> . LPAREN expression RPAREN
 
-    NUM             shift and go to state 20
-    ID              shift and go to state 12
-    LPAREN          shift and go to state 13
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
-    term                           shift and go to state 30
-    factor                         shift and go to state 15
+    term                           shift and go to state 27
+    factor                         shift and go to state 14
 
-state 22
+state 21
 
     (2) expression -> expression MINUS . term
     (4) term -> . term TIMES factor
@@ -478,107 +391,78 @@ state 22
     (8) factor -> . ID
     (9) factor -> . LPAREN expression RPAREN
 
-    NUM             shift and go to state 20
-    ID              shift and go to state 12
-    LPAREN          shift and go to state 13
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
-    term                           shift and go to state 31
-    factor                         shift and go to state 15
+    term                           shift and go to state 28
+    factor                         shift and go to state 14
 
-state 23
+state 22
 
     (4) term -> term TIMES . factor
     (7) factor -> . NUM
     (8) factor -> . ID
     (9) factor -> . LPAREN expression RPAREN
 
-    NUM             shift and go to state 20
-    ID              shift and go to state 12
-    LPAREN          shift and go to state 13
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
-    factor                         shift and go to state 32
+    factor                         shift and go to state 29
 
-state 24
+state 23
 
     (5) term -> term DIVIDE . factor
     (7) factor -> . NUM
     (8) factor -> . ID
     (9) factor -> . LPAREN expression RPAREN
 
-    NUM             shift and go to state 20
-    ID              shift and go to state 12
-    LPAREN          shift and go to state 13
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
 
-    factor                         shift and go to state 33
+    factor                         shift and go to state 30
+
+state 24
+
+    (21) declaration -> type ID . expression_opt
+    (25) function_declaration -> type ID . LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE
+    (22) expression_opt -> . EQUALS expression
+    (23) expression_opt -> . empty
+    (24) empty -> .
+
+    LPAREN          shift and go to state 32
+    EQUALS          shift and go to state 33
+    $end            reduce using rule 24 (empty -> .)
+
+    expression_opt                 shift and go to state 31
+    empty                          shift and go to state 34
 
 state 25
-
-    (20) expression -> IF condition . THEN expression
-
-    THEN            shift and go to state 34
-
-
-state 26
-
-    (19) condition -> expression . COMPARISON expression
-    (1) expression -> expression . PLUS term
-    (2) expression -> expression . MINUS term
-    (13) COMPARISON -> . EQUALS
-    (14) COMPARISON -> . NOT_EQUALS
-    (15) COMPARISON -> . LESS_THAN
-    (16) COMPARISON -> . LESS_THAN_OR_EQUALS
-    (17) COMPARISON -> . GREATER_THAN
-    (18) COMPARISON -> . GREATER_THAN_OR_EQUALS
-
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
-    EQUALS          shift and go to state 36
-    NOT_EQUALS      shift and go to state 37
-    LESS_THAN       shift and go to state 38
-    LESS_THAN_OR_EQUALS shift and go to state 39
-    GREATER_THAN    shift and go to state 40
-    GREATER_THAN_OR_EQUALS shift and go to state 41
-
-    COMPARISON                     shift and go to state 35
-
-state 27
-
-    (29) declaration -> type ID . expression_opt NEWLINE
-    (33) function_declaration -> type ID . LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE
-    (30) expression_opt -> . EQUALS expression
-    (31) expression_opt -> . empty
-    (32) empty -> .
-
-    LPAREN          shift and go to state 43
-    EQUALS          shift and go to state 44
-    NEWLINE         reduce using rule 32 (empty -> .)
-
-    expression_opt                 shift and go to state 42
-    empty                          shift and go to state 45
-
-state 28
 
     (9) factor -> LPAREN expression . RPAREN
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
 
-    RPAREN          shift and go to state 46
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    RPAREN          shift and go to state 35
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
 
 
-state 29
+state 26
 
-    (38) return_statement -> RETURN expression . NEWLINE
+    (30) return_statement -> RETURN expression .
     (1) expression -> expression . PLUS term
     (2) expression -> expression . MINUS term
 
-    NEWLINE         shift and go to state 47
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    $end            reduce using rule 30 (return_statement -> RETURN expression .)
+    NEWLINE         reduce using rule 30 (return_statement -> RETURN expression .)
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
 
 
-state 30
+state 27
 
     (1) expression -> expression PLUS term .
     (4) term -> term . TIMES factor
@@ -587,20 +471,13 @@ state 30
     PLUS            reduce using rule 1 (expression -> expression PLUS term .)
     MINUS           reduce using rule 1 (expression -> expression PLUS term .)
     $end            reduce using rule 1 (expression -> expression PLUS term .)
-    EQUALS          reduce using rule 1 (expression -> expression PLUS term .)
-    NOT_EQUALS      reduce using rule 1 (expression -> expression PLUS term .)
-    LESS_THAN       reduce using rule 1 (expression -> expression PLUS term .)
-    LESS_THAN_OR_EQUALS reduce using rule 1 (expression -> expression PLUS term .)
-    GREATER_THAN    reduce using rule 1 (expression -> expression PLUS term .)
-    GREATER_THAN_OR_EQUALS reduce using rule 1 (expression -> expression PLUS term .)
     RPAREN          reduce using rule 1 (expression -> expression PLUS term .)
     NEWLINE         reduce using rule 1 (expression -> expression PLUS term .)
-    THEN            reduce using rule 1 (expression -> expression PLUS term .)
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 24
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
 
-state 31
+state 28
 
     (2) expression -> expression MINUS term .
     (4) term -> term . TIMES factor
@@ -609,20 +486,13 @@ state 31
     PLUS            reduce using rule 2 (expression -> expression MINUS term .)
     MINUS           reduce using rule 2 (expression -> expression MINUS term .)
     $end            reduce using rule 2 (expression -> expression MINUS term .)
-    EQUALS          reduce using rule 2 (expression -> expression MINUS term .)
-    NOT_EQUALS      reduce using rule 2 (expression -> expression MINUS term .)
-    LESS_THAN       reduce using rule 2 (expression -> expression MINUS term .)
-    LESS_THAN_OR_EQUALS reduce using rule 2 (expression -> expression MINUS term .)
-    GREATER_THAN    reduce using rule 2 (expression -> expression MINUS term .)
-    GREATER_THAN_OR_EQUALS reduce using rule 2 (expression -> expression MINUS term .)
     RPAREN          reduce using rule 2 (expression -> expression MINUS term .)
     NEWLINE         reduce using rule 2 (expression -> expression MINUS term .)
-    THEN            reduce using rule 2 (expression -> expression MINUS term .)
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 24
+    TIMES           shift and go to state 22
+    DIVIDE          shift and go to state 23
 
 
-state 32
+state 29
 
     (4) term -> term TIMES factor .
 
@@ -631,18 +501,11 @@ state 32
     PLUS            reduce using rule 4 (term -> term TIMES factor .)
     MINUS           reduce using rule 4 (term -> term TIMES factor .)
     $end            reduce using rule 4 (term -> term TIMES factor .)
-    EQUALS          reduce using rule 4 (term -> term TIMES factor .)
-    NOT_EQUALS      reduce using rule 4 (term -> term TIMES factor .)
-    LESS_THAN       reduce using rule 4 (term -> term TIMES factor .)
-    LESS_THAN_OR_EQUALS reduce using rule 4 (term -> term TIMES factor .)
-    GREATER_THAN    reduce using rule 4 (term -> term TIMES factor .)
-    GREATER_THAN_OR_EQUALS reduce using rule 4 (term -> term TIMES factor .)
     RPAREN          reduce using rule 4 (term -> term TIMES factor .)
     NEWLINE         reduce using rule 4 (term -> term TIMES factor .)
-    THEN            reduce using rule 4 (term -> term TIMES factor .)
 
 
-state 33
+state 30
 
     (5) term -> term DIVIDE factor .
 
@@ -651,222 +514,79 @@ state 33
     PLUS            reduce using rule 5 (term -> term DIVIDE factor .)
     MINUS           reduce using rule 5 (term -> term DIVIDE factor .)
     $end            reduce using rule 5 (term -> term DIVIDE factor .)
-    EQUALS          reduce using rule 5 (term -> term DIVIDE factor .)
-    NOT_EQUALS      reduce using rule 5 (term -> term DIVIDE factor .)
-    LESS_THAN       reduce using rule 5 (term -> term DIVIDE factor .)
-    LESS_THAN_OR_EQUALS reduce using rule 5 (term -> term DIVIDE factor .)
-    GREATER_THAN    reduce using rule 5 (term -> term DIVIDE factor .)
-    GREATER_THAN_OR_EQUALS reduce using rule 5 (term -> term DIVIDE factor .)
     RPAREN          reduce using rule 5 (term -> term DIVIDE factor .)
     NEWLINE         reduce using rule 5 (term -> term DIVIDE factor .)
-    THEN            reduce using rule 5 (term -> term DIVIDE factor .)
 
+
+state 31
+
+    (21) declaration -> type ID expression_opt .
+
+    $end            reduce using rule 21 (declaration -> type ID expression_opt .)
+    NEWLINE         reduce using rule 21 (declaration -> type ID expression_opt .)
+
+
+state 32
+
+    (25) function_declaration -> type ID LPAREN . parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE
+    (26) parameter_list -> . parameter_list COMMA parameter
+    (27) parameter_list -> . parameter
+    (28) parameter_list -> . empty
+    (29) parameter -> . type ID
+    (24) empty -> .
+    (17) type -> . INT
+    (18) type -> . FLOAT
+    (19) type -> . STR
+    (20) type -> . BOOL
+
+    RPAREN          reduce using rule 24 (empty -> .)
+    COMMA           reduce using rule 24 (empty -> .)
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    STR             shift and go to state 17
+    BOOL            shift and go to state 18
+
+    type                           shift and go to state 36
+    parameter_list                 shift and go to state 37
+    parameter                      shift and go to state 38
+    empty                          shift and go to state 39
+
+state 33
+
+    (22) expression_opt -> EQUALS . expression
+    (1) expression -> . expression PLUS term
+    (2) expression -> . expression MINUS term
+    (3) expression -> . term
+    (10) expression -> . STRING
+    (11) expression -> . TRUE
+    (12) expression -> . FALSE
+    (4) term -> . term TIMES factor
+    (5) term -> . term DIVIDE factor
+    (6) term -> . factor
+    (7) factor -> . NUM
+    (8) factor -> . ID
+    (9) factor -> . LPAREN expression RPAREN
+
+    STRING          shift and go to state 7
+    TRUE            shift and go to state 8
+    FALSE           shift and go to state 9
+    NUM             shift and go to state 19
+    ID              shift and go to state 11
+    LPAREN          shift and go to state 12
+
+    expression                     shift and go to state 40
+    term                           shift and go to state 6
+    factor                         shift and go to state 14
 
 state 34
 
-    (20) expression -> IF condition THEN . expression
-    (1) expression -> . expression PLUS term
-    (2) expression -> . expression MINUS term
-    (3) expression -> . term
-    (10) expression -> . STRING
-    (11) expression -> . TRUE
-    (12) expression -> . FALSE
-    (20) expression -> . IF condition THEN expression
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
-    (6) term -> . factor
-    (7) factor -> . NUM
-    (8) factor -> . ID
-    (9) factor -> . LPAREN expression RPAREN
+    (23) expression_opt -> empty .
 
-    STRING          shift and go to state 7
-    TRUE            shift and go to state 8
-    FALSE           shift and go to state 9
-    IF              shift and go to state 10
-    NUM             shift and go to state 20
-    ID              shift and go to state 12
-    LPAREN          shift and go to state 13
+    $end            reduce using rule 23 (expression_opt -> empty .)
+    NEWLINE         reduce using rule 23 (expression_opt -> empty .)
 
-    expression                     shift and go to state 48
-    term                           shift and go to state 6
-    factor                         shift and go to state 15
 
 state 35
-
-    (19) condition -> expression COMPARISON . expression
-    (1) expression -> . expression PLUS term
-    (2) expression -> . expression MINUS term
-    (3) expression -> . term
-    (10) expression -> . STRING
-    (11) expression -> . TRUE
-    (12) expression -> . FALSE
-    (20) expression -> . IF condition THEN expression
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
-    (6) term -> . factor
-    (7) factor -> . NUM
-    (8) factor -> . ID
-    (9) factor -> . LPAREN expression RPAREN
-
-    STRING          shift and go to state 7
-    TRUE            shift and go to state 8
-    FALSE           shift and go to state 9
-    IF              shift and go to state 10
-    NUM             shift and go to state 20
-    ID              shift and go to state 12
-    LPAREN          shift and go to state 13
-
-    expression                     shift and go to state 49
-    term                           shift and go to state 6
-    factor                         shift and go to state 15
-
-state 36
-
-    (13) COMPARISON -> EQUALS .
-
-    STRING          reduce using rule 13 (COMPARISON -> EQUALS .)
-    TRUE            reduce using rule 13 (COMPARISON -> EQUALS .)
-    FALSE           reduce using rule 13 (COMPARISON -> EQUALS .)
-    IF              reduce using rule 13 (COMPARISON -> EQUALS .)
-    NUM             reduce using rule 13 (COMPARISON -> EQUALS .)
-    ID              reduce using rule 13 (COMPARISON -> EQUALS .)
-    LPAREN          reduce using rule 13 (COMPARISON -> EQUALS .)
-
-
-state 37
-
-    (14) COMPARISON -> NOT_EQUALS .
-
-    STRING          reduce using rule 14 (COMPARISON -> NOT_EQUALS .)
-    TRUE            reduce using rule 14 (COMPARISON -> NOT_EQUALS .)
-    FALSE           reduce using rule 14 (COMPARISON -> NOT_EQUALS .)
-    IF              reduce using rule 14 (COMPARISON -> NOT_EQUALS .)
-    NUM             reduce using rule 14 (COMPARISON -> NOT_EQUALS .)
-    ID              reduce using rule 14 (COMPARISON -> NOT_EQUALS .)
-    LPAREN          reduce using rule 14 (COMPARISON -> NOT_EQUALS .)
-
-
-state 38
-
-    (15) COMPARISON -> LESS_THAN .
-
-    STRING          reduce using rule 15 (COMPARISON -> LESS_THAN .)
-    TRUE            reduce using rule 15 (COMPARISON -> LESS_THAN .)
-    FALSE           reduce using rule 15 (COMPARISON -> LESS_THAN .)
-    IF              reduce using rule 15 (COMPARISON -> LESS_THAN .)
-    NUM             reduce using rule 15 (COMPARISON -> LESS_THAN .)
-    ID              reduce using rule 15 (COMPARISON -> LESS_THAN .)
-    LPAREN          reduce using rule 15 (COMPARISON -> LESS_THAN .)
-
-
-state 39
-
-    (16) COMPARISON -> LESS_THAN_OR_EQUALS .
-
-    STRING          reduce using rule 16 (COMPARISON -> LESS_THAN_OR_EQUALS .)
-    TRUE            reduce using rule 16 (COMPARISON -> LESS_THAN_OR_EQUALS .)
-    FALSE           reduce using rule 16 (COMPARISON -> LESS_THAN_OR_EQUALS .)
-    IF              reduce using rule 16 (COMPARISON -> LESS_THAN_OR_EQUALS .)
-    NUM             reduce using rule 16 (COMPARISON -> LESS_THAN_OR_EQUALS .)
-    ID              reduce using rule 16 (COMPARISON -> LESS_THAN_OR_EQUALS .)
-    LPAREN          reduce using rule 16 (COMPARISON -> LESS_THAN_OR_EQUALS .)
-
-
-state 40
-
-    (17) COMPARISON -> GREATER_THAN .
-
-    STRING          reduce using rule 17 (COMPARISON -> GREATER_THAN .)
-    TRUE            reduce using rule 17 (COMPARISON -> GREATER_THAN .)
-    FALSE           reduce using rule 17 (COMPARISON -> GREATER_THAN .)
-    IF              reduce using rule 17 (COMPARISON -> GREATER_THAN .)
-    NUM             reduce using rule 17 (COMPARISON -> GREATER_THAN .)
-    ID              reduce using rule 17 (COMPARISON -> GREATER_THAN .)
-    LPAREN          reduce using rule 17 (COMPARISON -> GREATER_THAN .)
-
-
-state 41
-
-    (18) COMPARISON -> GREATER_THAN_OR_EQUALS .
-
-    STRING          reduce using rule 18 (COMPARISON -> GREATER_THAN_OR_EQUALS .)
-    TRUE            reduce using rule 18 (COMPARISON -> GREATER_THAN_OR_EQUALS .)
-    FALSE           reduce using rule 18 (COMPARISON -> GREATER_THAN_OR_EQUALS .)
-    IF              reduce using rule 18 (COMPARISON -> GREATER_THAN_OR_EQUALS .)
-    NUM             reduce using rule 18 (COMPARISON -> GREATER_THAN_OR_EQUALS .)
-    ID              reduce using rule 18 (COMPARISON -> GREATER_THAN_OR_EQUALS .)
-    LPAREN          reduce using rule 18 (COMPARISON -> GREATER_THAN_OR_EQUALS .)
-
-
-state 42
-
-    (29) declaration -> type ID expression_opt . NEWLINE
-
-    NEWLINE         shift and go to state 50
-
-
-state 43
-
-    (33) function_declaration -> type ID LPAREN . parameter_list RPAREN LBRACE declaration return_statement RBRACE
-    (34) parameter_list -> . parameter_list COMMA parameter
-    (35) parameter_list -> . parameter
-    (36) parameter_list -> . empty
-    (37) parameter -> . type ID
-    (32) empty -> .
-    (25) type -> . INT
-    (26) type -> . FLOAT
-    (27) type -> . STR
-    (28) type -> . BOOL
-
-    RPAREN          reduce using rule 32 (empty -> .)
-    COMMA           reduce using rule 32 (empty -> .)
-    INT             shift and go to state 16
-    FLOAT           shift and go to state 17
-    STR             shift and go to state 18
-    BOOL            shift and go to state 19
-
-    type                           shift and go to state 51
-    parameter_list                 shift and go to state 52
-    parameter                      shift and go to state 53
-    empty                          shift and go to state 54
-
-state 44
-
-    (30) expression_opt -> EQUALS . expression
-    (1) expression -> . expression PLUS term
-    (2) expression -> . expression MINUS term
-    (3) expression -> . term
-    (10) expression -> . STRING
-    (11) expression -> . TRUE
-    (12) expression -> . FALSE
-    (20) expression -> . IF condition THEN expression
-    (4) term -> . term TIMES factor
-    (5) term -> . term DIVIDE factor
-    (6) term -> . factor
-    (7) factor -> . NUM
-    (8) factor -> . ID
-    (9) factor -> . LPAREN expression RPAREN
-
-    STRING          shift and go to state 7
-    TRUE            shift and go to state 8
-    FALSE           shift and go to state 9
-    IF              shift and go to state 10
-    NUM             shift and go to state 20
-    ID              shift and go to state 12
-    LPAREN          shift and go to state 13
-
-    expression                     shift and go to state 55
-    term                           shift and go to state 6
-    factor                         shift and go to state 15
-
-state 45
-
-    (31) expression_opt -> empty .
-
-    NEWLINE         reduce using rule 31 (expression_opt -> empty .)
-
-
-state 46
 
     (9) factor -> LPAREN expression RPAREN .
 
@@ -875,213 +595,205 @@ state 46
     PLUS            reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     MINUS           reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     $end            reduce using rule 9 (factor -> LPAREN expression RPAREN .)
-    EQUALS          reduce using rule 9 (factor -> LPAREN expression RPAREN .)
-    NOT_EQUALS      reduce using rule 9 (factor -> LPAREN expression RPAREN .)
-    LESS_THAN       reduce using rule 9 (factor -> LPAREN expression RPAREN .)
-    LESS_THAN_OR_EQUALS reduce using rule 9 (factor -> LPAREN expression RPAREN .)
-    GREATER_THAN    reduce using rule 9 (factor -> LPAREN expression RPAREN .)
-    GREATER_THAN_OR_EQUALS reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     RPAREN          reduce using rule 9 (factor -> LPAREN expression RPAREN .)
     NEWLINE         reduce using rule 9 (factor -> LPAREN expression RPAREN .)
-    THEN            reduce using rule 9 (factor -> LPAREN expression RPAREN .)
+
+
+state 36
+
+    (29) parameter -> type . ID
+
+    ID              shift and go to state 41
+
+
+state 37
+
+    (25) function_declaration -> type ID LPAREN parameter_list . RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE
+    (26) parameter_list -> parameter_list . COMMA parameter
+
+    RPAREN          shift and go to state 42
+    COMMA           shift and go to state 43
+
+
+state 38
+
+    (27) parameter_list -> parameter .
+
+    RPAREN          reduce using rule 27 (parameter_list -> parameter .)
+    COMMA           reduce using rule 27 (parameter_list -> parameter .)
+
+
+state 39
+
+    (28) parameter_list -> empty .
+
+    RPAREN          reduce using rule 28 (parameter_list -> empty .)
+    COMMA           reduce using rule 28 (parameter_list -> empty .)
+
+
+state 40
+
+    (22) expression_opt -> EQUALS expression .
+    (1) expression -> expression . PLUS term
+    (2) expression -> expression . MINUS term
+
+    $end            reduce using rule 22 (expression_opt -> EQUALS expression .)
+    NEWLINE         reduce using rule 22 (expression_opt -> EQUALS expression .)
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+
+
+state 41
+
+    (29) parameter -> type ID .
+
+    RPAREN          reduce using rule 29 (parameter -> type ID .)
+    COMMA           reduce using rule 29 (parameter -> type ID .)
+
+
+state 42
+
+    (25) function_declaration -> type ID LPAREN parameter_list RPAREN . LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE
+
+    LBRACE          shift and go to state 44
+
+
+state 43
+
+    (26) parameter_list -> parameter_list COMMA . parameter
+    (29) parameter -> . type ID
+    (17) type -> . INT
+    (18) type -> . FLOAT
+    (19) type -> . STR
+    (20) type -> . BOOL
+
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    STR             shift and go to state 17
+    BOOL            shift and go to state 18
+
+    parameter                      shift and go to state 45
+    type                           shift and go to state 36
+
+state 44
+
+    (25) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE . declaration_list NEWLINE return_statement NEWLINE RBRACE
+    (31) declaration_list -> . declaration_list NEWLINE declaration
+    (32) declaration_list -> . declaration
+    (33) declaration_list -> . empty
+    (21) declaration -> . type ID expression_opt
+    (24) empty -> .
+    (17) type -> . INT
+    (18) type -> . FLOAT
+    (19) type -> . STR
+    (20) type -> . BOOL
+
+    NEWLINE         reduce using rule 24 (empty -> .)
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    STR             shift and go to state 17
+    BOOL            shift and go to state 18
+
+    type                           shift and go to state 46
+    declaration_list               shift and go to state 47
+    declaration                    shift and go to state 48
+    empty                          shift and go to state 49
+
+state 45
+
+    (26) parameter_list -> parameter_list COMMA parameter .
+
+    RPAREN          reduce using rule 26 (parameter_list -> parameter_list COMMA parameter .)
+    COMMA           reduce using rule 26 (parameter_list -> parameter_list COMMA parameter .)
+
+
+state 46
+
+    (21) declaration -> type . ID expression_opt
+
+    ID              shift and go to state 50
 
 
 state 47
 
-    (38) return_statement -> RETURN expression NEWLINE .
+    (25) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration_list . NEWLINE return_statement NEWLINE RBRACE
+    (31) declaration_list -> declaration_list . NEWLINE declaration
 
-    $end            reduce using rule 38 (return_statement -> RETURN expression NEWLINE .)
-    RBRACE          reduce using rule 38 (return_statement -> RETURN expression NEWLINE .)
+    NEWLINE         shift and go to state 51
 
 
 state 48
 
-    (20) expression -> IF condition THEN expression .
-    (1) expression -> expression . PLUS term
-    (2) expression -> expression . MINUS term
+    (32) declaration_list -> declaration .
 
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-    $end            reduce using rule 20 (expression -> IF condition THEN expression .)
-    EQUALS          reduce using rule 20 (expression -> IF condition THEN expression .)
-    NOT_EQUALS      reduce using rule 20 (expression -> IF condition THEN expression .)
-    LESS_THAN       reduce using rule 20 (expression -> IF condition THEN expression .)
-    LESS_THAN_OR_EQUALS reduce using rule 20 (expression -> IF condition THEN expression .)
-    GREATER_THAN    reduce using rule 20 (expression -> IF condition THEN expression .)
-    GREATER_THAN_OR_EQUALS reduce using rule 20 (expression -> IF condition THEN expression .)
-    RPAREN          reduce using rule 20 (expression -> IF condition THEN expression .)
-    NEWLINE         reduce using rule 20 (expression -> IF condition THEN expression .)
-    THEN            reduce using rule 20 (expression -> IF condition THEN expression .)
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
-
-  ! PLUS            [ reduce using rule 20 (expression -> IF condition THEN expression .) ]
-  ! MINUS           [ reduce using rule 20 (expression -> IF condition THEN expression .) ]
+    NEWLINE         reduce using rule 32 (declaration_list -> declaration .)
 
 
 state 49
 
-    (19) condition -> expression COMPARISON expression .
-    (1) expression -> expression . PLUS term
-    (2) expression -> expression . MINUS term
+    (33) declaration_list -> empty .
 
-    THEN            reduce using rule 19 (condition -> expression COMPARISON expression .)
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    NEWLINE         reduce using rule 33 (declaration_list -> empty .)
 
 
 state 50
 
-    (29) declaration -> type ID expression_opt NEWLINE .
+    (21) declaration -> type ID . expression_opt
+    (22) expression_opt -> . EQUALS expression
+    (23) expression_opt -> . empty
+    (24) empty -> .
 
-    $end            reduce using rule 29 (declaration -> type ID expression_opt NEWLINE .)
-    RETURN          reduce using rule 29 (declaration -> type ID expression_opt NEWLINE .)
+    EQUALS          shift and go to state 33
+    NEWLINE         reduce using rule 24 (empty -> .)
 
+    expression_opt                 shift and go to state 31
+    empty                          shift and go to state 34
 
 state 51
 
-    (37) parameter -> type . ID
+    (25) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE . return_statement NEWLINE RBRACE
+    (31) declaration_list -> declaration_list NEWLINE . declaration
+    (30) return_statement -> . RETURN expression
+    (21) declaration -> . type ID expression_opt
+    (17) type -> . INT
+    (18) type -> . FLOAT
+    (19) type -> . STR
+    (20) type -> . BOOL
 
-    ID              shift and go to state 56
+    RETURN          shift and go to state 13
+    INT             shift and go to state 15
+    FLOAT           shift and go to state 16
+    STR             shift and go to state 17
+    BOOL            shift and go to state 18
 
+    type                           shift and go to state 46
+    return_statement               shift and go to state 52
+    declaration                    shift and go to state 53
 
 state 52
 
-    (33) function_declaration -> type ID LPAREN parameter_list . RPAREN LBRACE declaration return_statement RBRACE
-    (34) parameter_list -> parameter_list . COMMA parameter
+    (25) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement . NEWLINE RBRACE
 
-    RPAREN          shift and go to state 57
-    COMMA           shift and go to state 58
+    NEWLINE         shift and go to state 54
 
 
 state 53
 
-    (35) parameter_list -> parameter .
+    (31) declaration_list -> declaration_list NEWLINE declaration .
 
-    RPAREN          reduce using rule 35 (parameter_list -> parameter .)
-    COMMA           reduce using rule 35 (parameter_list -> parameter .)
+    NEWLINE         reduce using rule 31 (declaration_list -> declaration_list NEWLINE declaration .)
 
 
 state 54
 
-    (36) parameter_list -> empty .
+    (25) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE . RBRACE
 
-    RPAREN          reduce using rule 36 (parameter_list -> empty .)
-    COMMA           reduce using rule 36 (parameter_list -> empty .)
+    RBRACE          shift and go to state 55
 
 
 state 55
 
-    (30) expression_opt -> EQUALS expression .
-    (1) expression -> expression . PLUS term
-    (2) expression -> expression . MINUS term
+    (25) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE .
 
-    NEWLINE         reduce using rule 30 (expression_opt -> EQUALS expression .)
-    PLUS            shift and go to state 21
-    MINUS           shift and go to state 22
+    $end            reduce using rule 25 (function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE .)
 
-
-state 56
-
-    (37) parameter -> type ID .
-
-    RPAREN          reduce using rule 37 (parameter -> type ID .)
-    COMMA           reduce using rule 37 (parameter -> type ID .)
-
-
-state 57
-
-    (33) function_declaration -> type ID LPAREN parameter_list RPAREN . LBRACE declaration return_statement RBRACE
-
-    LBRACE          shift and go to state 59
-
-
-state 58
-
-    (34) parameter_list -> parameter_list COMMA . parameter
-    (37) parameter -> . type ID
-    (25) type -> . INT
-    (26) type -> . FLOAT
-    (27) type -> . STR
-    (28) type -> . BOOL
-
-    INT             shift and go to state 16
-    FLOAT           shift and go to state 17
-    STR             shift and go to state 18
-    BOOL            shift and go to state 19
-
-    parameter                      shift and go to state 60
-    type                           shift and go to state 51
-
-state 59
-
-    (33) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE . declaration return_statement RBRACE
-    (29) declaration -> . type ID expression_opt NEWLINE
-    (25) type -> . INT
-    (26) type -> . FLOAT
-    (27) type -> . STR
-    (28) type -> . BOOL
-
-    INT             shift and go to state 16
-    FLOAT           shift and go to state 17
-    STR             shift and go to state 18
-    BOOL            shift and go to state 19
-
-    type                           shift and go to state 61
-    declaration                    shift and go to state 62
-
-state 60
-
-    (34) parameter_list -> parameter_list COMMA parameter .
-
-    RPAREN          reduce using rule 34 (parameter_list -> parameter_list COMMA parameter .)
-    COMMA           reduce using rule 34 (parameter_list -> parameter_list COMMA parameter .)
-
-
-state 61
-
-    (29) declaration -> type . ID expression_opt NEWLINE
-
-    ID              shift and go to state 63
-
-
-state 62
-
-    (33) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration . return_statement RBRACE
-    (38) return_statement -> . RETURN expression NEWLINE
-
-    RETURN          shift and go to state 14
-
-    return_statement               shift and go to state 64
-
-state 63
-
-    (29) declaration -> type ID . expression_opt NEWLINE
-    (30) expression_opt -> . EQUALS expression
-    (31) expression_opt -> . empty
-    (32) empty -> .
-
-    EQUALS          shift and go to state 44
-    NEWLINE         reduce using rule 32 (empty -> .)
-
-    expression_opt                 shift and go to state 42
-    empty                          shift and go to state 45
-
-state 64
-
-    (33) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement . RBRACE
-
-    RBRACE          shift and go to state 65
-
-
-state 65
-
-    (33) function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE .
-
-    $end            reduce using rule 33 (function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration return_statement RBRACE .)
-
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: shift/reduce conflict for PLUS in state 48 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 48 resolved as shift
