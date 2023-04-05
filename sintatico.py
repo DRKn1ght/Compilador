@@ -133,7 +133,7 @@ def p_expression_boolean(p):
                   | FALSE'''
     p[0] = p[1]
 
-# ATIVIDAS QUE FALTAM --> WHILE/FOR/IF
+# ================= ATIVIDAS QUE FALTAM --> WHILE/FOR/IF ======================================
 def p_comparison(p):
     '''COMPARISON : EQUALS
                   | NOT_EQUALS
@@ -151,6 +151,8 @@ def p_condition(p):
 def p_expression_if(p):
     '''expression : IF condition THEN expression'''
     p[0] = {'type': 'if', 'condition': p[2], 'expression': p[4]}
+
+# ==============================================================================================
 
 # Define como o programa começa
 def p_start(p):

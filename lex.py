@@ -31,6 +31,11 @@ tokens = [
     'RBRACK',
     'COMMA',
     'NEWLINE',
+    'NOT_EQUALS',
+    'LESS_THAN',
+    'LESS_THAN_OR_EQUALS',
+    'GREATER_THAN',
+    'GREATER_THAN_OR_EQUALS'
 ]+ list(reserved.values())
 
 # Define o Regex de cada token
@@ -45,6 +50,11 @@ t_RPAREN = r'\)'
 t_LBRACK = r'\{'
 t_COMMA = r','
 t_RBRACK = r'\}'
+t_NOT_EQUALS = r'!='
+t_LESS_THAN = r'<'
+t_LESS_THAN_OR_EQUALS = r'<='
+t_GREATER_THAN = r'>'
+t_GREATER_THAN_OR_EQUALS = r'>='
 
 # Define caracteres ignorados
 t_ignore = ' \t'
