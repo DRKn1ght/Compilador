@@ -1,10 +1,5 @@
-# -*- coding: utf-8 -*-
-
-import ply.lex as lex
 import ply.yacc as yacc
 from lex import Lexer
-import re
-
 
 class Parser:
     def __init__(self):
