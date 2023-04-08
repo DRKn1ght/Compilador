@@ -3,7 +3,6 @@ import ply.yacc as yacc
 # Define um dict com as palavras reservadas
 reserved = {
     'if': 'IF',
-    'else': 'ELSE',
     'while': 'WHILE',
     'return': 'RETURN',
     'int': 'INT',
@@ -12,6 +11,7 @@ reserved = {
     'bool' : 'BOOL',
     'True' : 'TRUE',
     'False' : 'FALSE',
+    'print' : 'PRINT',
 }
 
 # Define a lista de Tokens
@@ -30,6 +30,7 @@ tokens = [
     'LBRACE',
     'RBRACE',
     'COMMA',
+    'SEMICOLON',
     'NEWLINE',
     'NOT_EQUALS',
     'LESS_THAN',
@@ -50,6 +51,7 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_LBRACE = r'\{'
 t_COMMA = r','
+t_SEMICOLON = r';'
 t_RBRACE = r'\}'
 t_NOT_EQUALS = r'!='
 t_LESS_THAN = r'<'
@@ -76,7 +78,6 @@ def t_STRING(t):
 def t_NEWLINE(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
-    return t
 
 # Define tratamento de erro
 def t_error(t):
@@ -127,12 +128,22 @@ def p_expression_string(p):
     '''expression : STRING'''
     p[0] = p[1]
 
-
 def p_expression_boolean(p):
     '''expression : TRUE
                   | FALSE'''
     p[0] = p[1]
 
+def p_print_statement(p):
+    '''print_statement : PRINT LPAREN expression RPAREN SEMICOLON'''
+    p[0] = ("PRINT", p[3])
+
+def p_statement(p):
+    '''statement : expression
+                 | if_statement
+                 | while_statement
+                 | declaration
+                 | print_statement'''
+    p[0] = p[1]
 # ========================================= IF =============================================
 
 def p_comparison(p):
@@ -156,9 +167,9 @@ def p_condition(p):
     else:
         p[0] = p[1]
 
-def p_expression_if(p):
-    '''expression : IF LPAREN condition RPAREN LBRACE expression RBRACE '''
-    p[0] = (p[1], p[3], p[6])
+def p_if_statement(p):
+    '''if_statement : IF LPAREN condition RPAREN LBRACE declaration_list RBRACE'''
+    p[0] = ("IF", p[3], p[6])
 
 # =============================================================================================
 
@@ -172,8 +183,9 @@ def p_expression_if(p):
 '''
 
 def p_while_statement(p):
-    '''while_statement : WHILE LPAREN condition RPAREN LBRACE expression RBRACE'''
-    p[0] = (p[1], p[3], p[6])
+    '''while_statement : WHILE LPAREN condition RPAREN LBRACE declaration_list RBRACE'''
+    p[0] = ("WHILE", p[3], p[6])
+
 
 # ==============================================================================================
 
@@ -198,7 +210,7 @@ def p_start(p):
              | return_statement
              | condition
              | while_statement
-             | for_statement"""
+             | statement"""
     p[0] = p[1]
 
 # Define o tipo da variável
@@ -211,14 +223,14 @@ def p_type_specifier(p):
 
 # Define a declaração de uma variável
 def p_declaration(p):
-    'declaration : type ID expression_opt'
+    'declaration : type ID expression_opt SEMICOLON'
     if len(p) == 4:
         if p[3] is not None:
-            p[0] = (p[1], p[2], p[3])
+            p[0] = ("DECLARATION", p[1], p[2], p[3])
         else:
-            p[0] = (p[1], p[2])
+            p[0] = ("DECLARATION", p[1], p[2])
     else:
-        p[0] = (p[1], p[2], p[3])
+        p[0] = ("DECLARATION", p[1], p[2], p[3])
 
 def p_expression_opt(p):
     '''expression_opt : EQUALS expression
@@ -233,8 +245,8 @@ def p_empty(p):
     pass
 
 def p_function_declaration(p):
-    '''function_declaration : type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE '''
-    p[0] = ("function", p[1], p[2], p[4], p[7], p[9])
+    '''function_declaration : type ID LPAREN parameter_list RPAREN LBRACE declaration_list return_statement RBRACE '''
+    p[0] = ("FUNCTION", p[1], p[2], p[4], p[7], p[8])
 
 # define the parameter_list rule
 def p_parameter_list(p):
@@ -253,18 +265,18 @@ def p_parameter(p):
     '''
     parameter : type ID
     '''
-    p[0] = (p[1], p[2])
+    p[0] = ("PARAMETER", p[1], p[2])
 
 def p_return_statement(p):
-    '''return_statement : RETURN expression'''
+    '''return_statement : RETURN expression SEMICOLON'''
     p[0] = (p[1], p[2])
 
 def p_declaration_list(p):
-    '''declaration_list : declaration_list NEWLINE declaration
-                        | declaration
+    '''declaration_list : declaration_list statement
+                        | statement
                         | empty'''
-    if (len(p) == 4):
-        p[0] = p[1] + [p[3]]
+    if (len(p) == 3):
+        p[0] = p[1] + [p[2]]
     else:
         p[0] = [p[1]]
 
@@ -273,13 +285,22 @@ parser = yacc.yacc(start='start')
 def ast(expression):
     return parser.parse(expression)
 
-"""
+
 print(ast('''int func1 (int a, int b) {
-                int a 
-                int b = 34
-                float c = 3.14
-                return a
+                int a;
+                int b = 34;
+                if (a < b){
+                    int a = 5;
+                    bool b = False;
+                    print("Primeiro if");
+                }
+                while(a < 5){
+                    float c = 3.14 + c;
+                    print(c);
+                }
+                return 5;
                 }'''))
-"""
+
 #print(ast("if(2<=3){\"iuashgdiuasd\"}"))
-print(ast("while(a){\"fon\"}"))
+#print(ast("while(a){\"fon\"}"))
+#print(ast("if (a < b) {int a = 5;}"))

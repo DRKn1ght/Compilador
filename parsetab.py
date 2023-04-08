@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'startBOOL COMMA DIVIDE DOUBLE_EQUALS ELSE EQUALS FALSE FLOAT GREATER_THAN GREATER_THAN_OR_EQUALS ID IF INT LBRACE LESS_THAN LESS_THAN_OR_EQUALS LPAREN MINUS NEWLINE NOT_EQUALS NUM PLUS RBRACE RETURN RPAREN STR STRING TIMES TRUE WHILEexpression : expression PLUS termexpression : expression MINUS termexpression : termterm : term TIMES factorterm : term DIVIDE factorterm : factorfactor : NUMfactor : IDfactor : LPAREN expression RPARENexpression : STRINGexpression : TRUE\n                  | FALSEcomparison : DOUBLE_EQUALS\n                  | NOT_EQUALS\n                  | LESS_THAN\n                  | LESS_THAN_OR_EQUALS\n                  | GREATER_THAN\n                  | GREATER_THAN_OR_EQUALS\n        condition : expression comparison expression\n                  | expression\n    expression : IF LPAREN condition RPAREN LBRACE expression RBRACE while_statement : WHILE LPAREN condition RPAREN LBRACE expression RBRACEstart : expression\n             | declaration\n             | function_declaration\n             | return_statement\n             | condition\n             | while_statementtype : INT\n            | FLOAT\n            | STR\n            | BOOLdeclaration : type ID expression_optexpression_opt : EQUALS expression\n                      | emptyempty :function_declaration : type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE \n    parameter_list : parameter_list COMMA parameter\n                   | parameter\n                   | empty\n    \n    parameter : type ID\n    return_statement : RETURN expressiondeclaration_list : declaration_list NEWLINE declaration\n                        | declaration\n                        | empty'
+_lr_signature = 'startBOOL COMMA DIVIDE DOUBLE_EQUALS EQUALS FALSE FLOAT GREATER_THAN GREATER_THAN_OR_EQUALS ID IF INT LBRACE LESS_THAN LESS_THAN_OR_EQUALS LPAREN MINUS NEWLINE NOT_EQUALS NUM PLUS PRINT RBRACE RETURN RPAREN SEMICOLON STR STRING TIMES TRUE WHILEexpression : expression PLUS termexpression : expression MINUS termexpression : termterm : term TIMES factorterm : term DIVIDE factorterm : factorfactor : NUMfactor : IDfactor : LPAREN expression RPARENexpression : STRINGexpression : TRUE\n                  | FALSEprint_statement : PRINT LPAREN expression RPAREN SEMICOLONstatement : expression\n                 | if_statement\n                 | while_statement\n                 | declaration\n                 | print_statementcomparison : DOUBLE_EQUALS\n                  | NOT_EQUALS\n                  | LESS_THAN\n                  | LESS_THAN_OR_EQUALS\n                  | GREATER_THAN\n                  | GREATER_THAN_OR_EQUALS\n        condition : expression comparison expression\n                  | expression\n    if_statement : IF LPAREN condition RPAREN LBRACE declaration_list RBRACEwhile_statement : WHILE LPAREN condition RPAREN LBRACE declaration_list RBRACEstart : expression\n             | declaration\n             | function_declaration\n             | return_statement\n             | condition\n             | while_statement\n             | statementtype : INT\n            | FLOAT\n            | STR\n            | BOOLdeclaration : type ID expression_opt SEMICOLONexpression_opt : EQUALS expression\n                      | emptyempty :function_declaration : type ID LPAREN parameter_list RPAREN LBRACE declaration_list return_statement RBRACE \n    parameter_list : parameter_list COMMA parameter\n                   | parameter\n                   | empty\n    \n    parameter : type ID\n    return_statement : RETURN expression SEMICOLONdeclaration_list : declaration_list statement\n                        | statement\n                        | empty'
     
-_lr_action_items = {'STRING':([0,13,16,26,27,28,29,30,31,32,35,39,50,60,64,],[9,9,9,9,-13,-14,-15,-16,-17,-18,9,9,9,9,9,]),'TRUE':([0,13,16,26,27,28,29,30,31,32,35,39,50,60,64,],[10,10,10,10,-13,-14,-15,-16,-17,-18,10,10,10,10,10,]),'FALSE':([0,13,16,26,27,28,29,30,31,32,35,39,50,60,64,],[11,11,11,11,-13,-14,-15,-16,-17,-18,11,11,11,11,11,]),'IF':([0,13,16,26,27,28,29,30,31,32,35,39,50,60,64,],[12,12,12,12,-13,-14,-15,-16,-17,-18,12,12,12,12,12,]),'RETURN':([0,76,],[16,16,]),'WHILE':([0,],[17,]),'INT':([0,49,63,66,76,],[19,19,19,19,19,]),'FLOAT':([0,49,63,66,76,],[20,20,20,20,20,]),'STR':([0,49,63,66,76,],[21,21,21,21,21,]),'BOOL':([0,49,63,66,76,],[22,22,22,22,22,]),'NUM':([0,13,16,24,25,26,27,28,29,30,31,32,33,34,35,39,50,60,64,],[23,23,23,23,23,23,-13,-14,-15,-16,-17,-18,23,23,23,23,23,23,23,]),'ID':([0,13,14,16,19,20,21,22,24,25,26,27,28,29,30,31,32,33,34,35,39,50,54,60,64,70,],[15,15,37,15,-29,-30,-31,-32,15,15,15,-13,-14,-15,-16,-17,-18,15,15,15,15,15,61,15,15,75,]),'LPAREN':([0,12,13,16,17,24,25,26,27,28,29,30,31,32,33,34,35,37,39,50,60,64,],[13,35,13,13,39,13,13,13,-13,-14,-15,-16,-17,-18,13,13,13,49,13,13,13,13,]),'$end':([1,2,3,4,5,6,7,8,9,10,11,15,18,23,37,38,40,41,42,43,44,47,48,51,58,69,74,80,],[0,-20,-24,-25,-26,-27,-28,-3,-10,-11,-12,-8,-6,-7,-36,-42,-1,-2,-19,-4,-5,-9,-33,-35,-34,-21,-22,-37,]),'PLUS':([2,8,9,10,11,15,18,23,36,38,40,41,42,43,44,46,47,58,65,68,69,],[24,-3,-10,-11,-12,-8,-6,-7,24,24,-1,-2,24,-4,-5,24,-9,24,24,24,-21,]),'MINUS':([2,8,9,10,11,15,18,23,36,38,40,41,42,43,44,46,47,58,65,68,69,],[25,-3,-10,-11,-12,-8,-6,-7,25,25,-1,-2,25,-4,-5,25,-9,25,25,25,-21,]),'DOUBLE_EQUALS':([2,8,9,10,11,15,18,23,40,41,43,44,46,47,69,],[27,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,27,-9,-21,]),'NOT_EQUALS':([2,8,9,10,11,15,18,23,40,41,43,44,46,47,69,],[28,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,28,-9,-21,]),'LESS_THAN':([2,8,9,10,11,15,18,23,40,41,43,44,46,47,69,],[29,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,29,-9,-21,]),'LESS_THAN_OR_EQUALS':([2,8,9,10,11,15,18,23,40,41,43,44,46,47,69,],[30,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,30,-9,-21,]),'GREATER_THAN':([2,8,9,10,11,15,18,23,40,41,43,44,46,47,69,],[31,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,31,-9,-21,]),'GREATER_THAN_OR_EQUALS':([2,8,9,10,11,15,18,23,40,41,43,44,46,47,69,],[32,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,32,-9,-21,]),'RPAREN':([8,9,10,11,15,18,23,36,40,41,42,43,44,45,46,47,49,52,55,56,57,61,67,69,],[-3,-10,-11,-12,-8,-6,-7,47,-1,-2,-19,-4,-5,53,-20,-9,-36,59,62,-39,-40,-41,-38,-21,]),'NEWLINE':([8,9,10,11,15,18,23,38,40,41,43,44,47,48,51,58,66,69,71,72,73,75,77,78,],[-3,-10,-11,-12,-8,-6,-7,-42,-1,-2,-4,-5,-9,-33,-35,-34,-36,-21,76,-44,-45,-36,79,-43,]),'RBRACE':([8,9,10,11,15,18,23,40,41,43,44,47,65,68,69,79,],[-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,-9,69,74,-21,80,]),'TIMES':([8,15,18,23,40,41,43,44,47,],[33,-8,-6,-7,33,33,-4,-5,-9,]),'DIVIDE':([8,15,18,23,40,41,43,44,47,],[34,-8,-6,-7,34,34,-4,-5,-9,]),'EQUALS':([37,75,],[50,50,]),'COMMA':([49,55,56,57,61,67,],[-36,63,-39,-40,-41,-38,]),'LBRACE':([53,59,62,],[60,64,66,]),}
+_lr_action_items = {'STRING':([0,9,10,11,12,14,15,16,18,19,20,27,30,31,32,33,34,35,36,42,43,44,45,46,48,49,52,54,60,72,73,74,75,77,78,79,80,81,82,84,85,86,87,89,],[10,-3,-10,-11,-12,-8,10,10,-15,-18,-6,-7,10,-19,-20,-21,-22,-23,-24,10,10,10,-1,-2,-4,-5,10,-9,-40,10,10,-13,10,10,-51,-52,-14,-16,-17,10,10,-28,-50,-27,]),'TRUE':([0,9,10,11,12,14,15,16,18,19,20,27,30,31,32,33,34,35,36,42,43,44,45,46,48,49,52,54,60,72,73,74,75,77,78,79,80,81,82,84,85,86,87,89,],[11,-3,-10,-11,-12,-8,11,11,-15,-18,-6,-7,11,-19,-20,-21,-22,-23,-24,11,11,11,-1,-2,-4,-5,11,-9,-40,11,11,-13,11,11,-51,-52,-14,-16,-17,11,11,-28,-50,-27,]),'FALSE':([0,9,10,11,12,14,15,16,18,19,20,27,30,31,32,33,34,35,36,42,43,44,45,46,48,49,52,54,60,72,73,74,75,77,78,79,80,81,82,84,85,86,87,89,],[12,-3,-10,-11,-12,-8,12,12,-15,-18,-6,-7,12,-19,-20,-21,-22,-23,-24,12,12,12,-1,-2,-4,-5,12,-9,-40,12,12,-13,12,12,-51,-52,-14,-16,-17,12,12,-28,-50,-27,]),'RETURN':([0,9,10,11,12,14,18,19,20,27,45,46,48,49,54,60,74,75,78,79,80,81,82,85,86,87,89,],[16,-3,-10,-11,-12,-8,-15,-18,-6,-7,-1,-2,-4,-5,-9,-40,-13,-43,-51,-52,-14,-16,-17,16,-28,-50,-27,]),'WHILE':([0,9,10,11,12,14,18,19,20,27,45,46,48,49,54,60,72,73,74,75,77,78,79,80,81,82,84,85,86,87,89,],[17,-3,-10,-11,-12,-8,-15,-18,-6,-7,-1,-2,-4,-5,-9,-40,17,17,-13,17,17,-51,-52,-14,-16,-17,17,17,-28,-50,-27,]),'INT':([0,9,10,11,12,14,18,19,20,27,45,46,48,49,51,54,60,71,72,73,74,75,77,78,79,80,81,82,84,85,86,87,89,],[21,-3,-10,-11,-12,-8,-15,-18,-6,-7,-1,-2,-4,-5,21,-9,-40,21,21,21,-13,21,21,-51,-52,-14,-16,-17,21,21,-28,-50,-27,]),'FLOAT':([0,9,10,11,12,14,18,19,20,27,45,46,48,49,51,54,60,71,72,73,74,75,77,78,79,80,81,82,84,85,86,87,89,],[22,-3,-10,-11,-12,-8,-15,-18,-6,-7,-1,-2,-4,-5,22,-9,-40,22,22,22,-13,22,22,-51,-52,-14,-16,-17,22,22,-28,-50,-27,]),'STR':([0,9,10,11,12,14,18,19,20,27,45,46,48,49,51,54,60,71,72,73,74,75,77,78,79,80,81,82,84,85,86,87,89,],[23,-3,-10,-11,-12,-8,-15,-18,-6,-7,-1,-2,-4,-5,23,-9,-40,23,23,23,-13,23,23,-51,-52,-14,-16,-17,23,23,-28,-50,-27,]),'BOOL':([0,9,10,11,12,14,18,19,20,27,45,46,48,49,51,54,60,71,72,73,74,75,77,78,79,80,81,82,84,85,86,87,89,],[24,-3,-10,-11,-12,-8,-15,-18,-6,-7,-1,-2,-4,-5,24,-9,-40,24,24,24,-13,24,24,-51,-52,-14,-16,-17,24,24,-28,-50,-27,]),'IF':([0,9,10,11,12,14,18,19,20,27,45,46,48,49,54,60,72,73,74,75,77,78,79,80,81,82,84,85,86,87,89,],[25,-3,-10,-11,-12,-8,-15,-18,-6,-7,-1,-2,-4,-5,-9,-40,25,25,-13,25,25,-51,-52,-14,-16,-17,25,25,-28,-50,-27,]),'PRINT':([0,9,10,11,12,14,18,19,20,27,45,46,48,49,54,60,72,73,74,75,77,78,79,80,81,82,84,85,86,87,89,],[26,-3,-10,-11,-12,-8,-15,-18,-6,-7,-1,-2,-4,-5,-9,-40,26,26,-13,26,26,-51,-52,-14,-16,-17,26,26,-28,-50,-27,]),'NUM':([0,9,10,11,12,14,15,16,18,19,20,27,28,29,30,31,32,33,34,35,36,37,38,42,43,44,45,46,48,49,52,54,60,72,73,74,75,77,78,79,80,81,82,84,85,86,87,89,],[27,-3,-10,-11,-12,-8,27,27,-15,-18,-6,-7,27,27,27,-19,-20,-21,-22,-23,-24,27,27,27,27,27,-1,-2,-4,-5,27,-9,-40,27,27,-13,27,27,-51,-52,-14,-16,-17,27,27,-28,-50,-27,]),'ID':([0,9,10,11,12,13,14,15,16,18,19,20,21,22,23,24,27,28,29,30,31,32,33,34,35,36,37,38,42,43,44,45,46,48,49,52,54,60,61,72,73,74,75,77,78,79,80,81,82,83,84,85,86,87,89,],[14,-3,-10,-11,-12,39,-8,14,14,-15,-18,-6,-36,-37,-38,-39,-7,14,14,14,-19,-20,-21,-22,-23,-24,14,14,14,14,14,-1,-2,-4,-5,14,-9,-40,69,14,14,-13,14,14,-51,-52,-14,-16,-17,88,14,14,-28,-50,-27,]),'LPAREN':([0,9,10,11,12,14,15,16,17,18,19,20,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,42,43,44,45,46,48,49,52,54,60,72,73,74,75,77,78,79,80,81,82,84,85,86,87,89,],[15,-3,-10,-11,-12,-8,15,15,42,-15,-18,-6,43,44,-7,15,15,15,-19,-20,-21,-22,-23,-24,15,15,51,15,15,15,-1,-2,-4,-5,15,-9,-40,15,15,-13,15,15,-51,-52,-14,-16,-17,15,15,-28,-50,-27,]),'$end':([1,2,3,4,5,6,7,8,9,10,11,12,14,18,19,20,27,45,46,47,48,49,54,55,60,74,86,89,91,],[0,-14,-17,-31,-32,-33,-16,-35,-3,-10,-11,-12,-8,-15,-18,-6,-7,-1,-2,-25,-4,-5,-9,-49,-40,-13,-28,-27,-44,]),'PLUS':([2,9,10,11,12,14,20,27,40,41,45,46,47,48,49,54,57,59,65,80,],[28,-3,-10,-11,-12,-8,-6,-7,28,28,-1,-2,28,-4,-5,-9,28,28,28,28,]),'MINUS':([2,9,10,11,12,14,20,27,40,41,45,46,47,48,49,54,57,59,65,80,],[29,-3,-10,-11,-12,-8,-6,-7,29,29,-1,-2,29,-4,-5,-9,29,29,29,29,]),'DOUBLE_EQUALS':([2,9,10,11,12,14,20,27,45,46,48,49,54,57,],[31,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,-9,31,]),'NOT_EQUALS':([2,9,10,11,12,14,20,27,45,46,48,49,54,57,],[32,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,-9,32,]),'LESS_THAN':([2,9,10,11,12,14,20,27,45,46,48,49,54,57,],[33,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,-9,33,]),'LESS_THAN_OR_EQUALS':([2,9,10,11,12,14,20,27,45,46,48,49,54,57,],[34,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,-9,34,]),'GREATER_THAN':([2,9,10,11,12,14,20,27,45,46,48,49,54,57,],[35,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,-9,35,]),'GREATER_THAN_OR_EQUALS':([2,9,10,11,12,14,20,27,45,46,48,49,54,57,],[36,-3,-10,-11,-12,-8,-6,-7,-1,-2,-4,-5,-9,36,]),'RPAREN':([9,10,11,12,14,20,27,40,45,46,47,48,49,51,54,56,57,58,59,62,63,64,69,76,],[-3,-10,-11,-12,-8,-6,-7,54,-1,-2,-25,-4,-5,-43,-9,66,-26,67,68,70,-46,-47,-48,-45,]),'SEMICOLON':([9,10,11,12,14,20,27,39,41,45,46,48,49,50,53,54,65,68,88,],[-3,-10,-11,-12,-8,-6,-7,-43,55,-1,-2,-4,-5,60,-42,-9,-41,74,-43,]),'RBRACE':([9,10,11,12,14,18,19,20,27,45,46,48,49,54,55,60,72,73,74,77,78,79,80,81,82,84,86,87,89,90,],[-3,-10,-11,-12,-8,-15,-18,-6,-7,-1,-2,-4,-5,-9,-49,-40,-43,-43,-13,86,-51,-52,-14,-16,-17,89,-28,-50,-27,91,]),'TIMES':([9,14,20,27,45,46,48,49,54,],[37,-8,-6,-7,37,37,-4,-5,-9,]),'DIVIDE':([9,14,20,27,45,46,48,49,54,],[38,-8,-6,-7,38,38,-4,-5,-9,]),'EQUALS':([39,88,],[52,52,]),'COMMA':([51,62,63,64,69,76,],[-43,71,-46,-47,-48,-45,]),'LBRACE':([66,67,70,],[72,73,75,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'start':([0,],[1,]),'expression':([0,13,16,26,35,39,50,60,64,],[2,36,38,42,46,46,58,65,68,]),'declaration':([0,66,76,],[3,72,78,]),'function_declaration':([0,],[4,]),'return_statement':([0,76,],[5,77,]),'condition':([0,35,39,],[6,45,52,]),'while_statement':([0,],[7,]),'term':([0,13,16,24,25,26,35,39,50,60,64,],[8,8,8,40,41,8,8,8,8,8,8,]),'type':([0,49,63,66,76,],[14,54,54,70,70,]),'factor':([0,13,16,24,25,26,33,34,35,39,50,60,64,],[18,18,18,18,18,18,43,44,18,18,18,18,18,]),'comparison':([2,46,],[26,26,]),'expression_opt':([37,75,],[48,48,]),'empty':([37,49,66,75,],[51,57,73,51,]),'parameter_list':([49,],[55,]),'parameter':([49,63,],[56,67,]),'declaration_list':([66,],[71,]),}
+_lr_goto_items = {'start':([0,],[1,]),'expression':([0,15,16,30,42,43,44,52,72,73,75,77,84,85,],[2,40,41,47,57,57,59,65,80,80,80,80,80,80,]),'declaration':([0,72,73,75,77,84,85,],[3,82,82,82,82,82,82,]),'function_declaration':([0,],[4,]),'return_statement':([0,85,],[5,90,]),'condition':([0,42,43,],[6,56,58,]),'while_statement':([0,72,73,75,77,84,85,],[7,81,81,81,81,81,81,]),'statement':([0,72,73,75,77,84,85,],[8,78,78,78,87,87,87,]),'term':([0,15,16,28,29,30,42,43,44,52,72,73,75,77,84,85,],[9,9,9,45,46,9,9,9,9,9,9,9,9,9,9,9,]),'type':([0,51,71,72,73,75,77,84,85,],[13,61,61,83,83,83,83,83,83,]),'if_statement':([0,72,73,75,77,84,85,],[18,18,18,18,18,18,18,]),'print_statement':([0,72,73,75,77,84,85,],[19,19,19,19,19,19,19,]),'factor':([0,15,16,28,29,30,37,38,42,43,44,52,72,73,75,77,84,85,],[20,20,20,20,20,20,48,49,20,20,20,20,20,20,20,20,20,20,]),'comparison':([2,57,],[30,30,]),'expression_opt':([39,88,],[50,50,]),'empty':([39,51,72,73,75,88,],[53,64,79,79,79,53,]),'parameter_list':([51,],[62,]),'parameter':([51,71,],[63,76,]),'declaration_list':([72,73,75,],[77,84,85,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,49 +27,56 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> start","S'",1,None,None,None),
-  ('expression -> expression PLUS term','expression',3,'p_expression_plus','sintatico.py',90),
-  ('expression -> expression MINUS term','expression',3,'p_expression_minus','sintatico.py',94),
-  ('expression -> term','expression',1,'p_expression_term','sintatico.py',98),
-  ('term -> term TIMES factor','term',3,'p_term_times','sintatico.py',102),
-  ('term -> term DIVIDE factor','term',3,'p_term_div','sintatico.py',106),
-  ('term -> factor','term',1,'p_term_factor','sintatico.py',110),
-  ('factor -> NUM','factor',1,'p_factor_num','sintatico.py',114),
-  ('factor -> ID','factor',1,'p_factor_id','sintatico.py',118),
-  ('factor -> LPAREN expression RPAREN','factor',3,'p_factor_expr','sintatico.py',122),
-  ('expression -> STRING','expression',1,'p_expression_string','sintatico.py',127),
+  ('expression -> expression PLUS term','expression',3,'p_expression_plus','sintatico.py',91),
+  ('expression -> expression MINUS term','expression',3,'p_expression_minus','sintatico.py',95),
+  ('expression -> term','expression',1,'p_expression_term','sintatico.py',99),
+  ('term -> term TIMES factor','term',3,'p_term_times','sintatico.py',103),
+  ('term -> term DIVIDE factor','term',3,'p_term_div','sintatico.py',107),
+  ('term -> factor','term',1,'p_term_factor','sintatico.py',111),
+  ('factor -> NUM','factor',1,'p_factor_num','sintatico.py',115),
+  ('factor -> ID','factor',1,'p_factor_id','sintatico.py',119),
+  ('factor -> LPAREN expression RPAREN','factor',3,'p_factor_expr','sintatico.py',123),
+  ('expression -> STRING','expression',1,'p_expression_string','sintatico.py',128),
   ('expression -> TRUE','expression',1,'p_expression_boolean','sintatico.py',132),
   ('expression -> FALSE','expression',1,'p_expression_boolean','sintatico.py',133),
-  ('comparison -> DOUBLE_EQUALS','comparison',1,'p_comparison','sintatico.py',139),
-  ('comparison -> NOT_EQUALS','comparison',1,'p_comparison','sintatico.py',140),
-  ('comparison -> LESS_THAN','comparison',1,'p_comparison','sintatico.py',141),
-  ('comparison -> LESS_THAN_OR_EQUALS','comparison',1,'p_comparison','sintatico.py',142),
-  ('comparison -> GREATER_THAN','comparison',1,'p_comparison','sintatico.py',143),
-  ('comparison -> GREATER_THAN_OR_EQUALS','comparison',1,'p_comparison','sintatico.py',144),
-  ('condition -> expression comparison expression','condition',3,'p_condition','sintatico.py',150),
-  ('condition -> expression','condition',1,'p_condition','sintatico.py',151),
-  ('expression -> IF LPAREN condition RPAREN LBRACE expression RBRACE','expression',7,'p_expression_if','sintatico.py',160),
-  ('while_statement -> WHILE LPAREN condition RPAREN LBRACE expression RBRACE','while_statement',7,'p_while_statement','sintatico.py',175),
-  ('start -> expression','start',1,'p_start','sintatico.py',183),
-  ('start -> declaration','start',1,'p_start','sintatico.py',184),
-  ('start -> function_declaration','start',1,'p_start','sintatico.py',185),
-  ('start -> return_statement','start',1,'p_start','sintatico.py',186),
-  ('start -> condition','start',1,'p_start','sintatico.py',187),
-  ('start -> while_statement','start',1,'p_start','sintatico.py',188),
-  ('type -> INT','type',1,'p_type_specifier','sintatico.py',193),
-  ('type -> FLOAT','type',1,'p_type_specifier','sintatico.py',194),
-  ('type -> STR','type',1,'p_type_specifier','sintatico.py',195),
-  ('type -> BOOL','type',1,'p_type_specifier','sintatico.py',196),
-  ('declaration -> type ID expression_opt','declaration',3,'p_declaration','sintatico.py',201),
-  ('expression_opt -> EQUALS expression','expression_opt',2,'p_expression_opt','sintatico.py',211),
-  ('expression_opt -> empty','expression_opt',1,'p_expression_opt','sintatico.py',212),
-  ('empty -> <empty>','empty',0,'p_empty','sintatico.py',219),
-  ('function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration_list NEWLINE return_statement NEWLINE RBRACE','function_declaration',11,'p_function_declaration','sintatico.py',223),
-  ('parameter_list -> parameter_list COMMA parameter','parameter_list',3,'p_parameter_list','sintatico.py',229),
-  ('parameter_list -> parameter','parameter_list',1,'p_parameter_list','sintatico.py',230),
-  ('parameter_list -> empty','parameter_list',1,'p_parameter_list','sintatico.py',231),
-  ('parameter -> type ID','parameter',2,'p_parameter','sintatico.py',241),
-  ('return_statement -> RETURN expression','return_statement',2,'p_return_statement','sintatico.py',246),
-  ('declaration_list -> declaration_list NEWLINE declaration','declaration_list',3,'p_declaration_list','sintatico.py',250),
-  ('declaration_list -> declaration','declaration_list',1,'p_declaration_list','sintatico.py',251),
-  ('declaration_list -> empty','declaration_list',1,'p_declaration_list','sintatico.py',252),
+  ('print_statement -> PRINT LPAREN expression RPAREN SEMICOLON','print_statement',5,'p_print_statement','sintatico.py',137),
+  ('statement -> expression','statement',1,'p_statement','sintatico.py',141),
+  ('statement -> if_statement','statement',1,'p_statement','sintatico.py',142),
+  ('statement -> while_statement','statement',1,'p_statement','sintatico.py',143),
+  ('statement -> declaration','statement',1,'p_statement','sintatico.py',144),
+  ('statement -> print_statement','statement',1,'p_statement','sintatico.py',145),
+  ('comparison -> DOUBLE_EQUALS','comparison',1,'p_comparison','sintatico.py',150),
+  ('comparison -> NOT_EQUALS','comparison',1,'p_comparison','sintatico.py',151),
+  ('comparison -> LESS_THAN','comparison',1,'p_comparison','sintatico.py',152),
+  ('comparison -> LESS_THAN_OR_EQUALS','comparison',1,'p_comparison','sintatico.py',153),
+  ('comparison -> GREATER_THAN','comparison',1,'p_comparison','sintatico.py',154),
+  ('comparison -> GREATER_THAN_OR_EQUALS','comparison',1,'p_comparison','sintatico.py',155),
+  ('condition -> expression comparison expression','condition',3,'p_condition','sintatico.py',161),
+  ('condition -> expression','condition',1,'p_condition','sintatico.py',162),
+  ('if_statement -> IF LPAREN condition RPAREN LBRACE declaration_list RBRACE','if_statement',7,'p_if_statement','sintatico.py',171),
+  ('while_statement -> WHILE LPAREN condition RPAREN LBRACE declaration_list RBRACE','while_statement',7,'p_while_statement','sintatico.py',186),
+  ('start -> expression','start',1,'p_start','sintatico.py',207),
+  ('start -> declaration','start',1,'p_start','sintatico.py',208),
+  ('start -> function_declaration','start',1,'p_start','sintatico.py',209),
+  ('start -> return_statement','start',1,'p_start','sintatico.py',210),
+  ('start -> condition','start',1,'p_start','sintatico.py',211),
+  ('start -> while_statement','start',1,'p_start','sintatico.py',212),
+  ('start -> statement','start',1,'p_start','sintatico.py',213),
+  ('type -> INT','type',1,'p_type_specifier','sintatico.py',218),
+  ('type -> FLOAT','type',1,'p_type_specifier','sintatico.py',219),
+  ('type -> STR','type',1,'p_type_specifier','sintatico.py',220),
+  ('type -> BOOL','type',1,'p_type_specifier','sintatico.py',221),
+  ('declaration -> type ID expression_opt SEMICOLON','declaration',4,'p_declaration','sintatico.py',226),
+  ('expression_opt -> EQUALS expression','expression_opt',2,'p_expression_opt','sintatico.py',236),
+  ('expression_opt -> empty','expression_opt',1,'p_expression_opt','sintatico.py',237),
+  ('empty -> <empty>','empty',0,'p_empty','sintatico.py',244),
+  ('function_declaration -> type ID LPAREN parameter_list RPAREN LBRACE declaration_list return_statement RBRACE','function_declaration',9,'p_function_declaration','sintatico.py',248),
+  ('parameter_list -> parameter_list COMMA parameter','parameter_list',3,'p_parameter_list','sintatico.py',254),
+  ('parameter_list -> parameter','parameter_list',1,'p_parameter_list','sintatico.py',255),
+  ('parameter_list -> empty','parameter_list',1,'p_parameter_list','sintatico.py',256),
+  ('parameter -> type ID','parameter',2,'p_parameter','sintatico.py',266),
+  ('return_statement -> RETURN expression SEMICOLON','return_statement',3,'p_return_statement','sintatico.py',271),
+  ('declaration_list -> declaration_list statement','declaration_list',2,'p_declaration_list','sintatico.py',275),
+  ('declaration_list -> statement','declaration_list',1,'p_declaration_list','sintatico.py',276),
+  ('declaration_list -> empty','declaration_list',1,'p_declaration_list','sintatico.py',277),
 ]
