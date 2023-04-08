@@ -1,0 +1,14 @@
+int func1 (int a, int b) {
+    int a;
+    int b = 34;
+    if (a < b){
+        int a = 5;
+        bool b = False;
+        print("Primeiro if");
+        }
+    while(a < 5){
+        float c = 3.14 + c;
+         print(c);
+        }
+    return 4 + 3;
+}
