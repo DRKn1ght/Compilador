@@ -70,7 +70,8 @@ class Parser:
                     | while_statement
                     | declaration
                     | print_statement
-                    | return_statement'''
+                    | return_statement
+                    | function_call'''
         p[0] = p[1]
 
     def p_comparison(self, p):
@@ -131,21 +132,42 @@ class Parser:
         '''empty :'''
         pass
 
+    def p_function_call(self, p):
+        '''function_call : ID LPAREN arg_list RPAREN SEMICOLON'''
+        p[0] = ("FUNCTION_CALL", p[1], p[3])
+
+    def p_arg(self, p):
+        '''arg : expression'''
+        p[0] = ("ARG", p[1])
+
+    def p_arg_list(self, p):
+        '''arg_list : arg_list COMMA arg
+                    | arg
+                    | empty'''
+        if (len(p) == 4):
+            p[0] = p[1] + [p[3]]
+        elif (p[1] is not None):
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1]
+
     def p_function_declaration(self, p):
         '''function_declaration : type ID LPAREN parameter_list RPAREN LBRACE declaration_list RBRACE '''
-        p[0] = ("FUNCTION", p[1], p[2], p[4], p[7])
+        p[0] = (("FUNCTION", p[1], p[2]), p[4], p[7])
 
     # define the parameter_list rule
     def p_parameter_list(self, p):
         '''
         parameter_list : parameter_list COMMA parameter
-                    | parameter
-                    | empty
+                       | parameter
+                       | empty
         '''
         if (len(p) == 4):
             p[0] = p[1] + [p[3]]
-        else:
+        elif (p[1] is not None):
             p[0] = [p[1]]
+        else:
+            p[0] = p[1]
 
     # define the parameter rule
     def p_parameter(self, p):

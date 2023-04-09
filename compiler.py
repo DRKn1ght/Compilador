@@ -8,4 +8,3 @@ with open('codigo.txt', 'r') as file:
 
 ast = parser.ast_node_list(input_str)
 parser.print_ast(ast)
-print(ast)

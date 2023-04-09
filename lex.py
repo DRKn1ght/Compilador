@@ -3,6 +3,7 @@ import ply.lex as lex
 class Lexer:
     reserved = {
         'if': 'IF',
+        'else': 'ELSE',
         'while': 'WHILE',
         'return': 'RETURN',
         'int': 'INT',

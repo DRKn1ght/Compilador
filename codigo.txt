@@ -10,5 +10,6 @@ int func1 (int a, int b) {
         float c = 3.14 + c;
          print(c);
         }
+    func1();
     return 4 + 3;
 }
