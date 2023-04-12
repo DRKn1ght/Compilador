@@ -4,6 +4,8 @@ def visit_function(data):
   # data[0] = (function, tipo, id)
   # data[1] = (parameter_list)
   # data[2] = (command_list)
+  for params in data[1]:
+     print(params)
   for c in data[2]:
     visit(c) 
 
@@ -21,6 +23,7 @@ def evaluate_expression(expr, type):
           
     if (type == 'bool'):
        return expr
+    
     if isinstance(expr, tuple):
         operator = expr[0]
         operand1 = evaluate_expression(expr[1], type)
@@ -69,7 +72,6 @@ def visit_if(data):
   # data[0] = (IF)
   # data[1] = (condition)
   # data[2] = (command_list)
-
   visit_condition(data[1]) # verificar se a expressao booleana ta certa
   print(data[0], data[1])
   for c in data[2]:
@@ -83,6 +85,7 @@ def visit_while(data):
   print(data[0], data[1])
   for c in data[2]:
     visit(c)
+
 def visit_condition(data):
   pass
 

@@ -1,13 +1,18 @@
-int func1 (int a, int b) {
-    int a;
-    int b = 4 + 3 * 2;
+int func1 (int y, int z) {
+    int a = 2;
+    int b = 4 + a;
+    float zty = 3;
+    a = 5.4;
+    int aga;
+    zty = zty + 5;
     if (a < b){
-        int c = 5;
-        bool d = False;
+        int c = 5 + a;
+        bool da;
+        da = True;
         print("Primeiro if");
         }
-    while(a < 5){
-         float e = 3.14 + c;
+    while(3 < 123 * 4 * 0){
+         float e = 3.14 + b;
         }
     func1();
     return 4 + 3 * 3 + 3 + 2;

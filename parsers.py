@@ -73,7 +73,8 @@ class Parser:
                     | declaration
                     | print_statement
                     | return_statement
-                    | function_call'''
+                    | function_call
+                    | assigment'''
         p[0] = p[1]
 
     def p_comparison(self, p):
@@ -113,22 +114,17 @@ class Parser:
 
     # Define a declaração de uma variável
     def p_declaration(self, p):
-        'declaration : type ID expression_opt SEMICOLON'
-        if len(p) == 4:
-            if p[3] is not None:
-                p[0] = ("DECLARATION", p[1], p[2], p[3])
-            else:
-                p[0] = ("DECLARATION", p[1], p[2])
+        '''declaration : type ID EQUALS expression SEMICOLON
+                       | type ID SEMICOLON
+        '''
+        if len(p) == 6:
+            p[0] = ("DECLARATION", p[1], p[2], p[4])
         else:
-            p[0] = ("DECLARATION", p[1], p[2], p[3])
+            p[0] = ("DECLARATION", p[1], p[2], None)
 
-    def p_expression_opt(self, p):
-        '''expression_opt : EQUALS expression
-                        | empty'''
-        if len(p) == 3:
-            p[0] = p[2]
-        else:
-            p[0] = None
+    def p_assigment(self, p):
+        '''assigment : ID EQUALS expression SEMICOLON'''
+        p[0] = ("ASSIGMENT", p[1], p[3])
 
     def p_empty(self, p):
         '''empty :'''
