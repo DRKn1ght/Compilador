@@ -52,7 +52,7 @@ class Parser:
 
     def p_expression_string(self, p):
         '''expression : STRING'''
-        p[0] = p[1]
+        p[0] = ("STRING", p[1])
 
     def p_expression_boolean(self, p):
         '''expression : TRUE
