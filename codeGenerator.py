@@ -1,40 +1,40 @@
+from optmizer import OptimizeCode
+optimizer = OptimizeCode()
+
 class CodeGenerator:
+  def __init__(self, optimize = False):
+    self.optimize = optimize
+    
   def ident(self, level):
     return " " * level
   
-  def evaluate_expression(self, expr):
+  def evaluate_expression(self, expr, type = None):
+    if isinstance(expr, bool):
+      if (expr == True):
+        return "true"
+      else:
+        return "false"
     if isinstance(expr, (float, int)):
-        return str(expr)
+        if (type == 'int'):
+          return int(expr)
+        else:
+          return float(expr)
     if isinstance(expr, tuple) and expr[0] == 'STRING':
-        tipo, value = expr
-        return value
+        type, value = expr
+        return '"' + value + '"'
+
+    if self.optimize == True:
+      return optimizer.optimize_expression(expr,type)
 
     if (isinstance(expr, tuple)):
       op, left, right = expr
     else:
       return str(expr)
     if isinstance(left, tuple):
-        left = '(' + self.evaluate_expression(left) + ')'
+        left = '(' + self.evaluate_expression(left, type) + ')'
     if isinstance(right, tuple):
-        right = '(' + self.evaluate_expression(right) + ')'
-    return f'{self.evaluate_expression(left)} {op} {self.evaluate_expression(right)}'
-
-  def optmize(self, expr):
-    if isinstance(expr, float):
-        return str(expr)
-    if (isinstance(expr, tuple)):
-      op, left, right = expr
-    else:
-      return str(expr)
-    if isinstance(left, tuple):
-        left = self.optmize(left)
-    if isinstance(right, tuple):
-        right = self.optmize(right)
-    if isinstance(left, float) and isinstance(right, float):
-        return str(eval(f'{left} {op} {right}'))
-    return f'{left} {op} {right}'
-
-    
+        right = '(' + self.evaluate_expression(right, type) + ')'
+    return f'{self.evaluate_expression(left, type)} {op} {self.evaluate_expression(right, type)}'
 
   def visit_function(self, data, ident_level = 0):
     # data[0] = (function, tipo, id)
@@ -50,7 +50,6 @@ class CodeGenerator:
     for c in data[2]:
       self.visit(c, ident_level+4)
 
-
   def visit_params(self, data):
     # data[0] = PARAMETER
     # data[1] = TYPE
@@ -62,11 +61,15 @@ class CodeGenerator:
     # data[1] = (tipo)
     # data[2] = (id)
     # data[3] = (exp)
-    if data[3] is not None:
-      value = self.evaluate_expression(data[3])
-      print(f"{self.ident(ident_level)}{data[1]} {data[2]} = {value};")
+    if (data[1] == 'str'):
+      type = 'String'
     else:
-      print(f"{self.ident(ident_level)}{data[1]} {data[2]};")
+      type = data[1]
+    if data[3] is not None:
+      value = self.evaluate_expression(data[3], type=data[1])
+      print(f"{self.ident(ident_level)}{type} {data[2]} = {value};")
+    else:
+      print(f"{self.ident(ident_level)}{type} {data[2]};")
 
   def visit_assigment(self, data, ident_level=0):
     # data[0] = (ASSIGMENT)
@@ -138,12 +141,11 @@ class CodeGenerator:
   def visit_print(self, data, ident_level=0):
     # data[0] = (PRINT)
     # data[1] = expression
-    #value = self.evaluate_expression(data[1])
-    print(f"{self.ident(ident_level)}cout << {data[1]};")
+    value = self.evaluate_expression(data[1])
+    print(f"{self.ident(ident_level)}cout << {value};")
 
   def visit_return(self, data, ident_level=0):
     # data[0] = (RETURN)
     # data[1] = exp
     value = self.evaluate_expression(data[1])
-    print(self.optmize(data[1]))
-    print(f"return {value}")
+    print(f"{self.ident(ident_level)}return {value}")

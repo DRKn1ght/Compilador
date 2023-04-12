@@ -27,6 +27,8 @@ class Semantic:
             return int(self.symbol_table[expr][1])
         elif (self.symbol_table[expr][0] == 'float'):
             return float(self.symbol_table[expr][1])
+        elif (self.symbol_table[expr][0] == 'str'):
+            return str(self.symbol_table[expr][1])
         else:
             return self.symbol_table[expr][1]
       raise ValueError(f"A variável '{expr}' não foi declarada.")
@@ -34,7 +36,9 @@ class Semantic:
   def evaluate_expression(self, expr, type = None):
       if (type == 'bool' or isinstance(expr, bool)):
             return expr
-      
+      if isinstance(expr, tuple) and expr[0] == 'STRING':
+        type, value = expr
+        return '"' + value + '"'
       if (isinstance(expr, str)):
         value = self.get_symbol_table_value(expr)
         if (value == None):
@@ -74,6 +78,11 @@ class Semantic:
               self.symbol_table.update({data[2]: (data[1], value)})
           else:
             raise ValueError(f"Variável {data[1], data[2]} tem que ser bool.")
+      elif (data[1] == 'str'):
+         if (isinstance(value, str)):
+            self.symbol_table.update({data[2]: (data[1], value)})
+         else:
+            raise ValueError(f"Variável {data[1], data[2]} tem que ser str")
       else:
         self.symbol_table.update({data[2]: (data[1], value)})
       print("DECLAROU", data[1], data[2], '=', value)
@@ -93,7 +102,11 @@ class Semantic:
                   self.symbol_table[data[1]] = (type, value)
               else:
                   raise ValueError(f"Expressão {data[2]} tem que ser bool.")
-      
+        if (type == 'str'):
+              if (isinstance(value, str)):
+                 self.symbol_table[data[1]] = (type, value)
+              else:
+                 raise ValueError(f"Expressão {data[2]} tem que ser str.")
         self.symbol_table[data[1]] = (type, value)
         print("ASSIGMENT", data[1], '=', value)
 

@@ -2,14 +2,16 @@ int func1 (int y, int z) {
     int a = 2;
     int b = 4 + a;
     float zty = 3;
+    str teste = "7";
+    teste = "5";
     a = 5.4;
     int aga;
     zty = zty + 5;
     if (a < b){
         int c = 5 + a;
-        bool da;
+        bool da = False;
         da = True;
-        print("a");
+        print(da);
         }
     while(3 < 123 * 4 * 0){
          float e = 3.14 + b;
