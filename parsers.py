@@ -40,7 +40,7 @@ class Parser:
 
     def p_factor_num(self, p):
         'factor : NUM'
-        p[0] = p[1]
+        p[0] = float(p[1])
 
     def p_factor_id(self, p):
         'factor : ID'
@@ -50,7 +50,6 @@ class Parser:
         'factor : LPAREN expression RPAREN'
         p[0] = p[2]
 
-
     def p_expression_string(self, p):
         '''expression : STRING'''
         p[0] = p[1]
@@ -58,7 +57,10 @@ class Parser:
     def p_expression_boolean(self, p):
         '''expression : TRUE
                     | FALSE'''
-        p[0] = p[1]
+        if (p[1] == 'True'):
+            p[0] = True
+        else:
+            p[0] = False
 
     def p_print_statement(self, p):
         '''print_statement : PRINT LPAREN expression RPAREN SEMICOLON'''

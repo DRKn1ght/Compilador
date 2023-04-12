@@ -1,4 +1,4 @@
-symbol_table = [{}]
+symbol_table = {}
 
 def visit_function(data):
   # data[0] = (function, tipo, id)
@@ -7,17 +7,49 @@ def visit_function(data):
   for c in data[2]:
     visit(c) 
 
+def evaluate_expression(expr, type):
+    if (isinstance(expr, str)):
+      if (expr in symbol_table):
+        if (symbol_table[expr][0] == 'int'):
+            return int(symbol_table[expr][1])
+        elif (symbol_table[expr][0] == 'float'):
+            return float(symbol_table[expr][1])
+        else:
+            raise ValueError(f"Variável é do tipo {symbol_table[expr]}, deveria ser int ou float")
+      else:
+         raise ValueError(f"A variável {expr} não existe")
+          
+    if (type == 'bool'):
+       return expr
+    if isinstance(expr, tuple):
+        operator = expr[0]
+        operand1 = evaluate_expression(expr[1], type)
+        operand2 = evaluate_expression(expr[2], type)
+        if operator == "+":
+            return operand1 + operand2
+        elif operator == "-":
+            return operand1 - operand2
+        elif operator == "*":
+            return operand1 * operand2
+        elif operator == "/":
+            return operand1 / operand2
+    else:
+        if (type == 'int'):
+           return int(expr)
+        else:
+           return float(expr)
+
 def visit_declaration(data):
   # data[0] = (DECLARATION)
   # data[1] = (tipo)
   # data[2] = (id)
   # data[3] = (exp)
   if data[2] in symbol_table:
-    return 'variavel ja declarada'
+    raise ValueError(f"Variável já declarada: {data[1], data[2]}")
   elif data[3] is not None:
-    print(data[1], data[2], "=", data[3])
+    symbol_table.update({data[1]: (data[2], evaluate_expression(data[3], data[1]))})
   else:
-    print(data[1], data[2], "=", data[3])
+    symbol_table.update({data[1]: (data[2], None)})
 
 def visit(data):
   if data[0] == 'DECLARATION':
@@ -32,7 +64,6 @@ def visit(data):
     return visit_while(data)
   if data[0] == 'FUNCTION_CALL':
     return visit_function_call(data)
-
 
 def visit_if(data):
   # data[0] = (IF)
@@ -71,6 +102,6 @@ def visit_return(data):
   # data[1] = exp
   print(data[0], data[1])
 
-data = (('FUNCTION', 'int', 'func1'), [('PARAMETER', 'int', 'a'), ('PARAMETER', 'int', 'b')], [('DECLARATION', 'int', 'a', None), ('DECLARATION', 'int', 'b', '34'), ('IF', ('<', 'a', 'b'), [('DECLARATION', 'int', 'a', '5'), ('DECLARATION', 'bool', 'b', 'False'), ('PRINT', 'Primeiro if')]), ('WHILE', ('<', 'a', '5'), [('DECLARATION', 'float', 'c', ('+', '3.14', 'c')), ('PRINT', 'c')]), ('FUNCTION_CALL', 'func1', None), ('RETURN', ('+', '4', '3'))])
-
+data = (('FUNCTION', 'int', 'func1'), [('PARAMETER', 'int', 'a'), ('PARAMETER', 'int', 'b')], [('DECLARATION', 'int', 'a', None), ('DECLARATION', 'int', 'b', ('+', 4.0, ('*', 3.0, 2.0))), ('IF', ('<', 'a', 'b'), [('DECLARATION', 'int', 'c', 5.0), ('DECLARATION', 'bool', 'd', False), ('PRINT', 'Primeiro if')]), ('WHILE', ('<', 'a', 5.0), [('DECLARATION', 'float', 'e', ('+', 3.14, 'c'))]), ('FUNCTION_CALL', 'func1', None), ('RETURN', ('+', ('+', ('+', 4.0, ('*', 3.0, 3.0)), 3.0), 2.0))])
 visit_function(data)
+#print(evaluate_expression(5.0, 'int'))
