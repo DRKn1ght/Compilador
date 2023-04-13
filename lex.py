@@ -65,6 +65,7 @@ class Lexer:
     def __init__(self):
         self.lexer = lex.lex(module=self)
 
+    # Define regra para comentários
     def t_COMMENT(self, t):
         r'//.*'
         pass

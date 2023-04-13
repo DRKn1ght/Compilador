@@ -8,6 +8,7 @@ lexer = Lexer()
 parser = Parser()
 semantic = Semantic()
 codeGenerator = CodeGenerator(optimize=True)
+
 if len(sys.argv) < 2:
     print("Uso: python3 compiler.py <file_name>")
     sys.exit(1)
@@ -16,6 +17,7 @@ with open(file_name, 'r') as file:
     input_str = file.read()
 
 ast = parser.ast_node_list(input_str)
+parser.print_ast(ast)
 semantic.visit_tree(ast)
 
 code_file_name = file_name.split('.txt')[0] + '.cpp'

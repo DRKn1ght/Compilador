@@ -1,5 +1,7 @@
-# Define the initial expression
 class OptimizeCode:
+    # Otimiza expressões aritméticas na forma:
+    # entrada > ('+', ('+', 'a', ('*', 43.0, 3.0)), 3.0))
+    # saída   > ((a + 129.0) + 3.0)
     def optimize_expression(self, expr, type = None):
         if isinstance(expr, (float, int)):
             if (type == 'int'):

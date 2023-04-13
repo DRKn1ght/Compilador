@@ -7,7 +7,23 @@ class CodeGenerator:
     
   def ident(self, level):
     return " " * level
+  
+  # Percorre a lista de nós, gera os includes e a função main
+  def visit_tree(self, nodes):
+    print("#include <iostream>\n#include <string>\nusing namespace std;\n")
+    for functions in nodes:
+      print(f"{functions[0][1]} {functions[0][2]}(", end="")
+      if (functions[1] is not None):
+        for i, params in enumerate(functions[1]):
+          self.visit_params(params)
+          if i < len(functions[1]) - 1:
+                print(", ", end="")
+      print(");")
+    for functions in nodes:
+      self.visit_function(functions)
+    self.print_main_function()
 
+  # Retorna o valor de uma expressão
   def evaluate_expression(self, expr, type = None):
     if isinstance(expr, bool):
       if (expr == True):
@@ -36,28 +52,10 @@ class CodeGenerator:
         right = '(' + self.evaluate_expression(right, type) + ')'
     return f'{self.evaluate_expression(left, type)} {op} {self.evaluate_expression(right, type)}'
 
-  def visit_tree(self, nodes):
-    print("#include <iostream>\n#include <string>\nusing namespace std;\n")
-    for functions in nodes:
-      print(f"{functions[0][1]} {functions[0][2]}(", end="")
-      if (functions[1] is not None):
-        for i, params in enumerate(functions[1]):
-          self.visit_params(params)
-          if i < len(functions[1]) - 1:
-                print(", ", end="")
-      print(");")
-
-
-    for functions in nodes:
-      self.visit_function(functions)
-    
-    self.print_main_function()
-
   def visit_function(self, data, ident_level = 0):
-    # data[0] = (function, tipo, id)
+    # data[0] = (FUNCTION, type, id)
     # data[1] = (parameter_list)
     # data[2] = (command_list)
-
     print(f"{self.ident(ident_level)}{data[0][1]} {data[0][2]}(", end="")
     if (data[1] is not None):
       for i, params in enumerate(data[1]):
@@ -65,7 +63,6 @@ class CodeGenerator:
         if i < len(data[1]) - 1:
               print(", ", end="")
     print(") {")
-
     for c in data[2]:
       self.visit(c, ident_level+4)
     print(f"{self.ident(ident_level)}}}")
@@ -79,8 +76,8 @@ int main(){
 
   def visit_params(self, data):
     # data[0] = PARAMETER
-    # data[1] = TYPE
-    # data[2] = ID
+    # data[1] = (type)
+    # data[2] = (id)
     type = data[1]
     if (type == 'str'):
       type = 'string'
@@ -88,9 +85,9 @@ int main(){
 
   def visit_declaration(self, data, ident_level=0):
     # data[0] = (DECLARATION)
-    # data[1] = (tipo)
+    # data[1] = (type)
     # data[2] = (id)
-    # data[3] = (exp)
+    # data[3] = (expression)
     if (data[1] == 'str'):
       type = 'String'
     else:
@@ -103,8 +100,8 @@ int main(){
 
   def visit_assigment(self, data, ident_level=0):
     # data[0] = (ASSIGMENT)
-    # data[1] = ID
-    # data[2] = (EXPRESSION)
+    # data[1] = (id)
+    # data[2] = (expression)
     value = self.evaluate_expression(data[2])
     print(f"{self.ident(ident_level)}{data[1]} = {value};")
 
@@ -150,15 +147,15 @@ int main(){
 
   def visit_condition(self, data, ident_level=0):
     # data[0] = (OP)
-    # data[1] = left exp
-    # data[2] = right exp
+    # data[1] = (left exp)
+    # data[2] = (right exp)
     left_expr = self.evaluate_expression(data[1])
     right_expr = self.evaluate_expression(data[2])
     return (left_expr, data[0], right_expr)
 
   def visit_function_call(self, data, ident_level=0):
     # data[0] = (FUNCTION_CALL)
-    # data[1] = (ID)
+    # data[1] = (id)
     # data[2] = (args)
     print(f"{self.ident(ident_level)}{data[1]}(", end="")
     if data[2] is not None:
@@ -173,12 +170,12 @@ int main(){
 
   def visit_print(self, data, ident_level=0):
     # data[0] = (PRINT)
-    # data[1] = expression
+    # data[1] = (expression)
     value = self.evaluate_expression(data[1], type='STRING')
     print(f"{self.ident(ident_level)}cout << {value};")
 
   def visit_return(self, data, ident_level=0):
     # data[0] = (RETURN)
-    # data[1] = exp
+    # data[1] = (expression)
     value = self.evaluate_expression(data[1])
     print(f"{self.ident(ident_level)}return {value};")
