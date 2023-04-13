@@ -1,6 +1,7 @@
 import ply.lex as lex
 
 class Lexer:
+    # Define palavras reservadas
     reserved = {
         'if': 'IF',
         'while': 'WHILE',

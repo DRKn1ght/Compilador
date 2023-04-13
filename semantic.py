@@ -1,27 +1,43 @@
 class Semantic:
   def __init__(self):
+    # symbol_table = (id : (type, value))
+    # function_table = (id : (type, has_return))
     self.symbol_table = {}
+    self.function_table = {}
+
+  def visit_tree(self, nodes):
+     for functions in nodes:
+        self.symbol_table = {}
+        self.visit_function(functions)
+      
+     if(self.function_table.get('start')) == None:
+        raise ValueError("É necessário uma função chamada 'start'.")
+     else:
+        self.function_table['start']
     
   def visit_function(self, data):
     # data[0] = (function, tipo, id)
     # data[1] = (parameter_list)
     # data[2] = (command_list)
-    self.symbol_table.update({data[0][2]: (data[0][1], data[0][0])})
+    self.function_table.update({data[0][2]: (data[0][1], data[1], False)})
     if (data[1] is not None):
+      if (data[0][2] == 'start'):
+         raise ValueError("A função 'start' não pode ter parâmetros.")
       for params in data[1]:
         self.visit_params(params)
     for c in data[2]:
-      self.visit(c)
-
-    if (self.symbol_table.get('RETURN')) == None:
-       raise ValueError(f"A função {data[0][2]} precisa de return.")
+      self.visit(c, data)
+    
+    for functions in self.function_table:
+       if (self.function_table[functions][1]) == False:
+          raise ValueError(f"A função '{functions}' precisa de return.")
 
   def visit_params(self, data):
     # data[0] = PARAMETER
     # data[1] = TYPE
     # data[2] = ID
-    print("DECLAROU_PARAM", data[1], data[2], '=', 'None')
-    self.symbol_table.update({data[2]: (data[1], None)})
+    print("DECLAROU_PARAM", data[1], data[2], '=', 0)
+    self.symbol_table.update({data[2]: (data[1], 0)})
 
   def get_symbol_table_value(self, expr):
       if (expr in self.symbol_table):
@@ -114,7 +130,7 @@ class Semantic:
         self.symbol_table[data[1]] = (type, value)
         print("ASSIGMENT", data[1], '=', value)
 
-  def visit(self, data):
+  def visit(self, data, function = None):
     if data[0] == 'DECLARATION':
       return self.visit_declaration(data)
     if data[0] == 'ASSIGMENT':
@@ -124,7 +140,7 @@ class Semantic:
     if data[0] == 'PRINT':
       return self.visit_print(data)
     if data[0] == 'RETURN':
-      return self.visit_return(data)
+      return self.visit_return(data, function)
     if data[0] == 'WHILE':
       return self.visit_while(data)
     if data[0] == 'FUNCTION_CALL':
@@ -168,14 +184,33 @@ class Semantic:
     # data[1] = (ID)
     # data[2] = (args)
     print(data[0], data[1], data[2])
+    if (self.function_table[data[1]][1] == None):
+       params_len = 0
+    else:
+       params_len = len(self.function_table[data[1]][1])
+    
+    if (data[2] == None):
+       args_len = 0
+    else:
+       args_len = len(data[2])
+    
+    if (params_len != args_len):
+       raise ValueError(f"A função '{data[1]}' precisa de {params_len} parâmetros, mas está recebendo {args_len}.")
+       
 
   def visit_print(self, data):
     # data[0] = (PRINT)
     # data[1] = expression
     print(data[0], data[1])
 
-  def visit_return(self, data):
+  def visit_return(self, data, function):
     # data[0] = (RETURN)
     # data[1] = exp
+    # function[0] = (FUNCTION)
+    # function[1] = (type)
+    # function[2] = (id)
     print(data[0], self.evaluate_expression(data[1]))
     self.symbol_table.update({data[0]: (data[1])})
+    
+    # Atualiza que a função tem return
+    self.function_table[function[0][2]] = (function[0][1], function[1], True)

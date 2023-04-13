@@ -1,6 +1,7 @@
 import ply.yacc as yacc
 from lex import Lexer
 
+# Sintático
 class Parser:
     def __init__(self):
         self.lexer = Lexer()
@@ -8,10 +9,21 @@ class Parser:
         self.parser = yacc.yacc(module=self)
         
     def p_program(self, p):
-        '''program : declaration
-                   | function_declaration
-                     '''
+        '''
+        program : function_declaration_list
+        '''
         p[0] = p[1]
+
+    def p_function_declaration_list(self, p):
+        '''
+        function_declaration_list : function_declaration
+                                | function_declaration_list function_declaration
+        '''
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1] + [p[2]]
+
          
     # Regras para pegar as expressões matemáticas
     def p_expression_plus(self, p):

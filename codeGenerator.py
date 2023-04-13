@@ -36,12 +36,28 @@ class CodeGenerator:
         right = '(' + self.evaluate_expression(right, type) + ')'
     return f'{self.evaluate_expression(left, type)} {op} {self.evaluate_expression(right, type)}'
 
+  def visit_tree(self, nodes):
+    print("#include <iostream>\n#include <string>\nusing namespace std;\n")
+    for functions in nodes:
+      print(f"{functions[0][1]} {functions[0][2]}(", end="")
+      if (functions[1] is not None):
+        for i, params in enumerate(functions[1]):
+          self.visit_params(params)
+          if i < len(functions[1]) - 1:
+                print(", ", end="")
+      print(");")
+
+
+    for functions in nodes:
+      self.visit_function(functions)
+    
+    self.print_main_function()
+
   def visit_function(self, data, ident_level = 0):
     # data[0] = (function, tipo, id)
     # data[1] = (parameter_list)
     # data[2] = (command_list)
 
-    print("#include <iostream>\n#include <string>\nusing namespace std;\n")
     print(f"{self.ident(ident_level)}{data[0][1]} {data[0][2]}(", end="")
     if (data[1] is not None):
       for i, params in enumerate(data[1]):
@@ -53,32 +69,22 @@ class CodeGenerator:
     for c in data[2]:
       self.visit(c, ident_level+4)
     print(f"{self.ident(ident_level)}}}")
-    self.print_main_function(data)
   
-  def print_main_function(self, data):
-    default_values = {'int': 0,
-                      'float': 0.0,
-                      'str': '""',
-                      'bool': 'false'}
-    args = "("
-    if (data[1] is not None):
-      for i, params in enumerate(data[1]):
-        if (i < len(data[1]) -1):
-          args += f"{default_values[params[1]]}, "
-      args += f"{default_values[params[1]]})"
-    else:
-      args += ")"
-    print(f"""
-int main(){{
-    {data[0][2]}{args};
+  def print_main_function(self):
+    print("""
+int main(){
+    start();
     return 0;
-}}""")
+}""")
 
   def visit_params(self, data):
     # data[0] = PARAMETER
     # data[1] = TYPE
     # data[2] = ID
-    print(f"{data[1]} {data[2]}", end="")
+    type = data[1]
+    if (type == 'str'):
+      type = 'string'
+    print(f"{type} {data[2]}", end="")
 
   def visit_declaration(self, data, ident_level=0):
     # data[0] = (DECLARATION)
@@ -157,7 +163,10 @@ int main(){{
     print(f"{self.ident(ident_level)}{data[1]}(", end="")
     if data[2] is not None:
       for i, args in enumerate(data[2]):
-        print(f"{args[1]}", end = "")
+        arg = args[1]
+        if (isinstance(arg, tuple) and arg[0] == "STRING"):
+          arg = '"' + arg[1] + '"'
+        print(f"{self.evaluate_expression(arg)}", end = "")
         if i < len(data[2]) - 1:
           print(", ", end="")
     print(");")

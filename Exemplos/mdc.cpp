@@ -2,9 +2,9 @@
 #include <string>
 using namespace std;
 
+int mdc(int a, int b);
+int start();
 int mdc(int a, int b) {
-    a = 50.0;
-    b = 156.0;
     while (a != b){
         if (a > b){
             a = (a - b);
@@ -16,8 +16,14 @@ int mdc(int a, int b) {
     cout << a;
     return 0.0;
 }
+int start() {
+    cout << "MDC de 50 e 156:";
+    cout << "\n";
+    mdc(50.0, 156.0);
+    return 0.0;
+}
 
 int main(){
-    mdc(0, 0);
+    start();
     return 0;
 }

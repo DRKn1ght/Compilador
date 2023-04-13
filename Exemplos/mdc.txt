@@ -1,6 +1,4 @@
 int mdc(int a, int b) {
-    a = 50;
-    b = 156;
     while (a != b){
         if (a > b){
             a = a - b;
@@ -10,5 +8,12 @@ int mdc(int a, int b) {
         }
     }
     print(a);
+    return 0;
+}
+
+int start(){
+    print("MDC de 50 e 156:");
+    print("\n");
+    mdc(50, 156);
     return 0;
 }
