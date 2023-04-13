@@ -1,0 +1,14 @@
+int mdc(int a, int b) {
+    a = 50;
+    b = 156;
+    while (a != b){
+        if (a > b){
+            a = a - b;
+        }
+        if (a <= b){
+            b = b - a;
+        }
+    }
+    print(a);
+    return 0;
+}

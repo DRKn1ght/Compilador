@@ -1,4 +1,4 @@
-from optmizer import OptimizeCode
+from optimizer import OptimizeCode
 optimizer = OptimizeCode()
 
 class CodeGenerator:
@@ -7,7 +7,7 @@ class CodeGenerator:
     
   def ident(self, level):
     return " " * level
-  
+
   def evaluate_expression(self, expr, type = None):
     if isinstance(expr, bool):
       if (expr == True):
@@ -23,7 +23,7 @@ class CodeGenerator:
         type, value = expr
         return '"' + value + '"'
 
-    if self.optimize == True:
+    if self.optimize == True and type is not 'STRING':
       return optimizer.optimize_expression(expr,type)
 
     if (isinstance(expr, tuple)):
@@ -40,15 +40,39 @@ class CodeGenerator:
     # data[0] = (function, tipo, id)
     # data[1] = (parameter_list)
     # data[2] = (command_list)
-    print(f"{self.ident(ident_level)}{data[0][1]} {data[0][2]} (", end="")
-    for i, params in enumerate(data[1]):
-      self.visit_params(params)
-      if i < len(data[1]) - 1:
-            print(", ", end="")
+
+    print("#include <iostream>\n#include <string>\nusing namespace std;\n")
+    print(f"{self.ident(ident_level)}{data[0][1]} {data[0][2]}(", end="")
+    if (data[1] is not None):
+      for i, params in enumerate(data[1]):
+        self.visit_params(params)
+        if i < len(data[1]) - 1:
+              print(", ", end="")
     print(") {")
 
     for c in data[2]:
       self.visit(c, ident_level+4)
+    print(f"{self.ident(ident_level)}}}")
+    self.print_main_function(data)
+  
+  def print_main_function(self, data):
+    default_values = {'int': 0,
+                      'float': 0.0,
+                      'str': '""',
+                      'bool': 'false'}
+    args = "("
+    if (data[1] is not None):
+      for i, params in enumerate(data[1]):
+        if (i < len(data[1]) -1):
+          args += f"{default_values[params[1]]}, "
+      args += f"{default_values[params[1]]})"
+    else:
+      args += ")"
+    print(f"""
+int main(){{
+    {data[0][2]}{args};
+    return 0;
+}}""")
 
   def visit_params(self, data):
     # data[0] = PARAMETER
@@ -141,11 +165,11 @@ class CodeGenerator:
   def visit_print(self, data, ident_level=0):
     # data[0] = (PRINT)
     # data[1] = expression
-    value = self.evaluate_expression(data[1])
+    value = self.evaluate_expression(data[1], type='STRING')
     print(f"{self.ident(ident_level)}cout << {value};")
 
   def visit_return(self, data, ident_level=0):
     # data[0] = (RETURN)
     # data[1] = exp
     value = self.evaluate_expression(data[1])
-    print(f"{self.ident(ident_level)}return {value}")
+    print(f"{self.ident(ident_level)}return {value};")

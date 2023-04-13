@@ -7,10 +7,14 @@ class Semantic:
     # data[1] = (parameter_list)
     # data[2] = (command_list)
     self.symbol_table.update({data[0][2]: (data[0][1], data[0][0])})
-    for params in data[1]:
-      self.visit_params(params)
+    if (data[1] is not None):
+      for params in data[1]:
+        self.visit_params(params)
     for c in data[2]:
       self.visit(c)
+
+    if (self.symbol_table.get('RETURN')) == None:
+       raise ValueError(f"A função {data[0][2]} precisa de return.")
 
   def visit_params(self, data):
     # data[0] = PARAMETER
@@ -174,3 +178,4 @@ class Semantic:
     # data[0] = (RETURN)
     # data[1] = exp
     print(data[0], self.evaluate_expression(data[1]))
+    self.symbol_table.update({data[0]: (data[1])})

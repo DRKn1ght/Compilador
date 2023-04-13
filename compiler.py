@@ -1,3 +1,4 @@
+import sys
 from lex import Lexer
 from parsers import Parser
 from semantic import Semantic
@@ -12,9 +13,10 @@ with open('codigo.txt', 'r') as file:
     input_str = file.read()
 
 ast = parser.ast_node_list(input_str)
-
-
-#parser.print_ast(ast)
-print(ast)
 semantic.visit_function(ast)
+
+code_file = open("codigo.cpp", "w")
+sys.stdout = code_file
 codeGenerator.visit_function(ast)
+sys.stdout = sys.__stdout__
+code_file.close()
