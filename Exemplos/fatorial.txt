@@ -1,0 +1,15 @@
+int fatorial(int n){
+    int result = 1;
+    int i = 1;
+    while (i <= n){
+        result = result * i;
+        i = i + 1;
+    }
+    print(result);
+    return result;
+}
+int start(){
+    print("O fatorial de 10 é: ");
+    fatorial(10);
+    return 0;
+}

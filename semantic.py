@@ -12,8 +12,9 @@ class Semantic:
       
      if(self.function_table.get('start')) == None:
         raise ValueError("É necessário uma função chamada 'start'.")
-     else:
-        self.function_table['start']
+     for functions in self.function_table:
+       if (self.function_table[functions][2]) == False:
+          raise ValueError(f"A função '{functions}' precisa de return.")
     
   def visit_function(self, data):
     # data[0] = (function, tipo, id)
@@ -27,10 +28,6 @@ class Semantic:
         self.visit_params(params)
     for c in data[2]:
       self.visit(c, data)
-    
-    for functions in self.function_table:
-       if (self.function_table[functions][1]) == False:
-          raise ValueError(f"A função '{functions}' precisa de return.")
 
   def visit_params(self, data):
     # data[0] = PARAMETER
@@ -184,7 +181,7 @@ class Semantic:
     # data[1] = (ID)
     # data[2] = (args)
     print(data[0], data[1], data[2])
-    if (self.function_table[data[1]][1] == None):
+    if (self.function_table.get(data[1]) == None):
        params_len = 0
     else:
        params_len = len(self.function_table[data[1]][1])
@@ -213,4 +210,5 @@ class Semantic:
     self.symbol_table.update({data[0]: (data[1])})
     
     # Atualiza que a função tem return
-    self.function_table[function[0][2]] = (function[0][1], function[1], True)
+    if (function != None): 
+      self.function_table[function[0][2]] = (function[0][1], function[1], True)

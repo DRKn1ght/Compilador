@@ -32,7 +32,6 @@ class Lexer:
         'RBRACE',
         'COMMA',
         'SEMICOLON',
-        'NEWLINE',
         'NOT_EQUALS',
         'LESS_THAN',
         'LESS_THAN_OR_EQUALS',
@@ -65,6 +64,10 @@ class Lexer:
 
     def __init__(self):
         self.lexer = lex.lex(module=self)
+
+    def t_COMMENT(self, t):
+        r'//.*'
+        pass
 
     # Define regra para diferenciar token de palavra reservada    
     def t_reserved(self, t):

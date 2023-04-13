@@ -1,10 +1,10 @@
-int optimize(){
+int start(){
     int a = 123 * 34 + 5;
     int b = (5 + 3 * 3) + 3 * a;
     if (a > (443 + 32 * 35)){
         print("é maior");
-        return a;
     }
     print("é menor");
     return a + 43 * 3 + 3;
+    return 0;
 }

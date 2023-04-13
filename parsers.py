@@ -75,7 +75,8 @@ class Parser:
             p[0] = False
 
     def p_print_statement(self, p):
-        '''print_statement : PRINT LPAREN expression RPAREN SEMICOLON'''
+        '''print_statement : PRINT LPAREN expression RPAREN SEMICOLON
+                           | PRINT LPAREN function_call RPAREN SEMICOLON'''
         p[0] = ("PRINT", p[3])
 
     def p_statement(self, p):
@@ -187,7 +188,8 @@ class Parser:
         p[0] = ("PARAMETER", p[1], p[2])
 
     def p_return_statement(self, p):
-        '''return_statement : RETURN expression SEMICOLON'''
+        '''return_statement : RETURN expression SEMICOLON
+                            | RETURN function_call SEMICOLON'''
         p[0] = ("RETURN", p[2])
 
     def p_declaration_list(self, p):
