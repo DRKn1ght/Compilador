@@ -26,4 +26,4 @@ python .\parsers.py
 ```
 python .\compiler.py <arquivo>
 ```
-6. Será gerado um arquivo `arquivo.cpp` com o código convertido para cpp. Após isso, basta usar o compilador GCC para executá-lo.
+6. Será gerado um arquivo `<arquivo>.cpp` com o código convertido para cpp. Após isso, basta usar o compilador GCC para executá-lo.
